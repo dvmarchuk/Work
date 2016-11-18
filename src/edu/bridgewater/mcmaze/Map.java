@@ -18,10 +18,11 @@ public class Map {
 	/**
 	 * constructor
 	 * 
-	 * @param numSqlStatements
-	 *            the number of SQL statements required to make the map
 	 * @param relativeBGImagePath
-	 *            the relative path to the background image file for the map
+	 *            the relative path (i.e., assets/) to the background image for
+	 *            this map (probably won't be implemented)
+	 * @param mapName
+	 *            the name of the map (file)
 	 */
 	public Map(String relativeBGImagePath, String mapName) {
 		this.relativeBGImagePath = relativeBGImagePath;
@@ -32,12 +33,13 @@ public class Map {
 	/**
 	 * constructor
 	 * 
-	 * @param numSqlStatements
-	 *            the number of SQL statements required to make the map
 	 * @param relativeBGImagePath
-	 *            the relative path to the background image file for the map
+	 *            the relative path (i.e., assets/) to the background image for
+	 *            this map (probably won't be implemented)
+	 * @param mapName
+	 *            the name of the map (file)
 	 * @param sqlStatements
-	 *            the SQL statements required to make this database
+	 *            the SQL statements to use when creating this map in memory
 	 */
 	public Map(String relativeBGImagePath, String mapName, String... sqlStatements) {
 		this.relativeBGImagePath = relativeBGImagePath;
