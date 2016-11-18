@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.Driver;
+
 /**
  * This class holds information from a map loaded from a file
  * 
