@@ -1,0 +1,7 @@
+MAP FILE STRUCTURE:
+
+-- relativeBackgroundImagePath (String) : the relative path for the BG image file
+-- numSQLStatements (String) : the number of SQL statements following this object
+-- sqlStatements (String...) : an arbitrary number of Strings, each of which is a line of SQL code
+
+(this might not be accurate any more, I don't remember...)
