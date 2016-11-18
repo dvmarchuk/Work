@@ -12,18 +12,18 @@ import java.util.Random;
 
 public class Enemy {
 	String name;
-	Vertex location;
+	Room location;
 	int previousDir;
 	Random rand;
 	final int CHASE_DISTANCE = 2;
 
-	public Enemy(Vertex location) {
+	public Enemy(Room location) {
 		this.name = "clown";
 		this.location = location;
 		rand = new Random();
 	}
 
-	public Enemy(String name, Vertex location) {
+	public Enemy(String name, Room location) {
 		this.name = name;
 		this.location = location;
 		rand = new Random();
