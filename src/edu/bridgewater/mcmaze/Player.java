@@ -25,8 +25,7 @@ public class Player {
 	}
 
 	public void movePlayer(int direction) {
-		// Check location.adjacencyList for valid path for movement
-		// change location node to destination of movement
+		
 		movesMade++;
 	}
 
