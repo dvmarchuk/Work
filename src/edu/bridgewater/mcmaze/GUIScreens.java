@@ -277,14 +277,8 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-<<<<<<< HEAD
 		ChoiceBox selectRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
 		ChoiceBox destinationRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
-=======
-		ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
-		//ComboBox selectRoomChoiceBox1 = new ComboBox();
-		ChoiceBox<String> destinationRoomChoiceBox = new ChoiceBox<String>(); 
->>>>>>> 012700f5cd879a3f7863654030ce1a7ad13cdca5
 		Button northWestButton2 = new Button("North-West");
 		Button northButton2 = new Button("North");
 		Button northEastButton2 = new Button("North-East");
@@ -401,6 +395,13 @@ public class GUIScreens extends Application {
 			public void handle(ActionEvent ae) {
 				//Code for storing data from the input areas
 				myStage.setScene(makerScene);
+rooms++;
+				String rmName = roomName.getText();
+				String rmDescription = roomDesc.getText();
+				roomDesc.setText(" ");
+				roomName.setText(" ");
+
+				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms)); 	//(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor, final int roomID)
 			}
 		});
 
@@ -409,6 +410,14 @@ public class GUIScreens extends Application {
 				//Code for storing final room data from input areas
 				myStage.setScene(makerScene2);
 				myStage.setTitle("The McMaze Maker - Room Positioning");
+rooms++;
+
+				String rmName = roomName.getText();
+				String rmDescription = roomDesc.getText();
+				roomDesc.setText(" ");
+				roomName.setText(" ");
+
+				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms)); 	//(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor, final int roomID)
 			}
 		});
 
@@ -601,23 +610,6 @@ public class GUIScreens extends Application {
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
 
-<<<<<<< HEAD
-=======
-				rooms++;
-				myStage.setScene(makerScene2);
-				myStage.setTitle("The McMaze Maker - Room Positions");
-
-				String rmName = roomName.getText();
-				String rmDescription = roomDesc.getText();
-				roomDesc.setText(" ");
-				roomName.setText(" ");
-
-				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms)); 	//(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor, final int roomID)
-
-				
-				
-			}
-		});
 		
 		addRoomButton.setOnAction(new EventHandler<ActionEvent>() {//finish this room and add another room
 			public void handle(ActionEvent ae) {
@@ -715,7 +707,7 @@ public class GUIScreens extends Application {
 				//Edge edge = new Edge(srcRoom, destRoom, 9);
 			}
 		});
->>>>>>> 012700f5cd879a3f7863654030ce1a7ad13cdca5
+
 	}
 
 	// Moves the player based on an int direction
