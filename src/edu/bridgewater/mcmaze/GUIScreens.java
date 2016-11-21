@@ -2,6 +2,7 @@ package edu.bridgewater.mcmaze;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.animation.FadeTransition;
 import javafx.application.*;
@@ -12,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -199,7 +201,8 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		ChoiceBox<String> selectRoomChoiceBox = new ChoiceBox<String>();//TODO
+		ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
+		//ComboBox selectRoomChoiceBox1 = new ComboBox();
 		ChoiceBox<String> destinationRoomChoiceBox = new ChoiceBox<String>(); 
 		Button northWestButton2 = new Button("North-West");
 		Button northButton2 = new Button("North");
@@ -482,10 +485,10 @@ public class GUIScreens extends Application {
 
 			}
 		});
-
+		String test = "test";
 		//ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
 		//ChoiceBox destinationRoomChoiceBox = new ChoiceBox();
-		
+		//((List<String>) selectRoomChoiceBox).add(test);
 		
 		//0 north 8 up 9 down
 		//set north of also means set south of...
