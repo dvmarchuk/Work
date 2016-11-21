@@ -263,13 +263,11 @@ public class DBInterface {
 	}
 
 	/**
-	 * get the id of the starting room
-	 * 
-	 * @return the RoomID for the starting room
+	 * @return the starting room
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
-	public static int getStartingRoom() throws SQLException {
+	public static Room getStartingRoom() throws SQLException {
 		// query the database
 		PreparedStatement ps = con
 				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "
@@ -277,6 +275,43 @@ public class DBInterface {
 		ResultSet rs = ps.executeQuery();
 		// get the starting room
 		rs.next();
-		return rs.getInt("RoomID");
+		return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
+				rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+	}
+
+	/**
+	 * @return the easter egg room
+	 * @throws SQLException
+	 *             if there is a SQL problem
+	 */
+	public static Room getEasterEggRoom() throws SQLException {
+		// query the database
+		PreparedStatement ps = con
+				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "
+						+ map.getName() + ".Rooms WHERE HasMcGregor='1';");
+		ResultSet rs = ps.executeQuery();
+		// get the easter egg room
+		rs.next();
+		return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
+				rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+	}
+
+	/**
+	 * @return an array containing all ending rooms for the maze
+	 * @throws SQLException
+	 *             if there is a SQL problem
+	 */
+	public static Room[] getEndingRooms() throws SQLException {
+		// query the database
+		PreparedStatement ps = con
+				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "
+						+ map.getName() + ".Rooms WHERE IsEndingRoom='1';");
+		ResultSet rs = ps.executeQuery();
+		// get the ending rooms
+		ArrayList<Room> rooms = new ArrayList<>();
+		while (rs.next())
+			rooms.add(new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
+					rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID")));
+		return rooms.toArray(new Room[rooms.size()]);
 	}
 }
