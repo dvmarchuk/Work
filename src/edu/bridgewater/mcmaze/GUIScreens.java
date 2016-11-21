@@ -2,6 +2,7 @@ package edu.bridgewater.mcmaze;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextPane;
 
@@ -15,6 +16,7 @@ import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -275,8 +277,14 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
+<<<<<<< HEAD
 		ChoiceBox selectRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
 		ChoiceBox destinationRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
+=======
+		ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
+		//ComboBox selectRoomChoiceBox1 = new ComboBox();
+		ChoiceBox<String> destinationRoomChoiceBox = new ChoiceBox<String>(); 
+>>>>>>> 012700f5cd879a3f7863654030ce1a7ad13cdca5
 		Button northWestButton2 = new Button("North-West");
 		Button northButton2 = new Button("North");
 		Button northEastButton2 = new Button("North-East");
@@ -593,6 +601,121 @@ public class GUIScreens extends Application {
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
 
+<<<<<<< HEAD
+=======
+				rooms++;
+				myStage.setScene(makerScene2);
+				myStage.setTitle("The McMaze Maker - Room Positions");
+
+				String rmName = roomName.getText();
+				String rmDescription = roomDesc.getText();
+				roomDesc.setText(" ");
+				roomName.setText(" ");
+
+				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms)); 	//(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor, final int roomID)
+
+				
+				
+			}
+		});
+		
+		addRoomButton.setOnAction(new EventHandler<ActionEvent>() {//finish this room and add another room
+			public void handle(ActionEvent ae) {
+				
+				rooms++;
+				String rmName = roomName.getText();
+				roomNameArray.add(rmName);
+
+				String rmDescription = roomDesc.getText();
+				roomDescriptionArray.add(rmDescription);
+				roomDesc.setText(" ");
+				roomName.setText(" ");
+				
+				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms)); 
+
+			}
+		});
+		String test = "test";
+		//ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
+		//ChoiceBox destinationRoomChoiceBox = new ChoiceBox();
+		//((List<String>) selectRoomChoiceBox).add(test);
+		
+		//0 north 8 up 9 down
+		//set north of also means set south of...
+		selectRoomButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//srcRoom = inputBox.getText();
+			}
+		});		
+		
+		selectDestinationButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//destRoom = input
+			}
+		});
+		
+		northButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 0);
+
+			}
+		});	
+		
+		northEastButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 1);
+			}
+		});	
+		
+		eastButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 2);
+			}
+		});	
+		
+		southEastButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 3);
+			}
+		});
+				
+		southButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 4);
+			}
+		});
+				
+		southWestButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 5);
+			}
+		});
+				
+		westButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 6);
+			}
+		});		
+		
+		northWestButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 7);
+			}
+		});
+				
+
+		upButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 8);
+			}
+		});
+			
+		downButton2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Edge edge = new Edge(srcRoom, destRoom, 9);
+			}
+		});
+>>>>>>> 012700f5cd879a3f7863654030ce1a7ad13cdca5
 	}
 
 	// Moves the player based on an int direction
