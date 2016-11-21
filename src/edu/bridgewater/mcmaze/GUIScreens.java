@@ -177,7 +177,8 @@ public class GUIScreens extends Application {
 
 		// Initializing textfield, labels, scrollPane, and buttons for playNode
 		TextField userInput = new TextField();
-		JTextPane gameOutput = new JTextPane();
+		TextArea outputText = new TextArea();
+		outputText.setText("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
 
 		Button northWestButton = new Button("North-West");
 		Button northButton = new Button("North");
@@ -195,6 +196,9 @@ public class GUIScreens extends Application {
 		userInput.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
 		userInput.setPadding(new Insets(0,0,0,25));
 		userInput.setPrefWidth(700);
+		outputText.setStyle("-fx-padding: 5; -fx-font: 22 arial;");
+		outputText.setEditable(false);
+		outputText.setWrapText(true);
 
 		northWestButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
 		northButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
@@ -241,7 +245,7 @@ public class GUIScreens extends Application {
 		centerVBox.getChildren().addAll(middleArrowsVBox, helpButton);
 
 		VBox inputOutputVBox = new VBox(100);
-		inputOutputVBox.getChildren().addAll(userInput);
+		inputOutputVBox.getChildren().addAll(outputText, userInput);
 
 		// Initializing everything for makerNode1
 		Label nameOfRoom = new Label("Name of Room : ");
@@ -285,6 +289,10 @@ public class GUIScreens extends Application {
 		Button downButton2 = new Button("Below");
 		Button confirmRoomPositioningButton = new Button("Confirm this room position");
 		Button nextNodeButton = new Button("Continue to next screen");
+		TextArea outputRooms = new TextArea();
+		outputRooms.setStyle("-fx-padding: 5; -fx-font: 22 arial;");
+		outputRooms.setEditable(false);
+		outputRooms.setWrapText(true);
 
 		VBox leftSideVBox = new VBox(50);
 		leftSideVBox.getChildren().addAll(northWestButton2, westButton2, southWestButton2);
@@ -570,7 +578,7 @@ public class GUIScreens extends Application {
 
 		rootNode.getChildren().addAll(menuBar, titleLabel, introVBox);
 		playNode.add(menuBar2, 0, 0, 13, 1);
-		//playNode.add(gameOutput, 0, 2);
+		playNode.add(inputOutputVBox, 0, 2);
 		playNode.add(upButton, 9, 2);
 		playNode.add(leftArrowsVBox, 9, 3);
 		playNode.add(centerVBox, 10, 3);
