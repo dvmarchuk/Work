@@ -92,7 +92,7 @@ public class GUIScreens extends Application {
 		menuBar.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
 
 		MenuBar menuBar2 = new MenuBar();
-		menuBar2.setPadding(new Insets(0, 1100, 0, 0));
+		//menuBar2.setPadding(new Insets(0, 1100, 0, 0));
 		menuBar2.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
 
 		MenuBar menuBar3 = new MenuBar();
@@ -589,6 +589,7 @@ public class GUIScreens extends Application {
 		makerNode.setBottom(confirmRoomHBox);
 		makerNode2.setTop(menuBar4);
 		makerNode2.setCenter(finalVBox);
+		makerNode2.setRight(outputRooms);
 		makerNode3.setTop(menuBar5);
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
