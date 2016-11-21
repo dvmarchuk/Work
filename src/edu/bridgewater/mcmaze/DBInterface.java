@@ -253,12 +253,30 @@ public class DBInterface {
 	public static int[] getExits(final int roomID) throws SQLException {
 		ArrayList<Integer> exits = new ArrayList<>();
 		Edge[] edges = getEdges(roomID);
-		for(Edge e:edges)
+		for (Edge e : edges)
 			exits.add(e.getEdgeType());
 		// convert to array
 		int[] result = new int[exits.size()];
 		for (int i = 0; i < result.length; i++)
 			result[i] = exits.get(i);
 		return result;
+	}
+
+	/**
+	 * get the id of the starting room
+	 * 
+	 * @return the RoomID for the starting room
+	 * @throws SQLException
+	 *             if there is a SQL problem
+	 */
+	public static int getStartingRoom() throws SQLException {
+		// query the database
+		PreparedStatement ps = con
+				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "
+						+ map.getName() + ".Rooms WHERE IsStartingRoom='1';");
+		ResultSet rs = ps.executeQuery();
+		// get the starting room
+		rs.next();
+		return rs.getInt("RoomID");
 	}
 }
