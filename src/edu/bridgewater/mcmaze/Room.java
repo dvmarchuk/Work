@@ -8,6 +8,7 @@ package edu.bridgewater.mcmaze;
  */
 public class Room {
 	private String roomName, roomDesc;
+//	private String mcRoomDesc;
 	private boolean isStartingRoom, isEndingRoom, hasMcGregor;
 	private final int roomID;
 
@@ -31,6 +32,7 @@ public class Room {
 			final int roomID) {
 		this.setRoomName(roomName);
 		this.setRoomDesc(roomDesc);
+//		this.setMcRoomDesc(mcRoomDesc);
 		this.setStartingRoom(isStartingRoom);
 		this.setEndingRoom(isEndingRoom);
 		this.setHasMcGregor(hasMcGregor);
