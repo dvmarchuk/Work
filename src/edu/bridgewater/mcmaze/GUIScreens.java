@@ -646,7 +646,7 @@ public class GUIScreens extends Application {
 		String test = "test";
 
 		//ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
-		//ChoiceBox destinationRoomChoiceBox = new ChoiceBox();
+		//ChoiceBox destinationRoomChoiceBox = new ChoiceBox();h 
 		//((List<String>) selectRoomChoiceBox).add(test);
 
 		//0 north 8 up 9 down
