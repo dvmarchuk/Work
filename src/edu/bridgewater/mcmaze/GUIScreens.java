@@ -46,6 +46,7 @@ public class GUIScreens extends Application {
 	private static final String ArrayList = null;
 	ArrayList<String> roomDescriptionArray = new ArrayList<String>();
 	ArrayList<String> roomNameArray = new ArrayList<String>();
+	ArrayList<Room> roomArray = new ArrayList<Room>();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -277,8 +278,8 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		ChoiceBox selectRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
-		ChoiceBox destinationRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
+		ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<Room>();	//Change to ChoiceBox<Room> when merged
+		ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<Room>();	//Change to ChoiceBox<Room> when merged
 		Button northWestButton2 = new Button("North-West");
 		Button northButton2 = new Button("North");
 		Button northEastButton2 = new Button("North-East");
@@ -395,7 +396,7 @@ public class GUIScreens extends Application {
 			public void handle(ActionEvent ae) {
 				//Code for storing data from the input areas
 				myStage.setScene(makerScene);
-rooms++;
+				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
 				roomDesc.setText(" ");
@@ -410,7 +411,7 @@ rooms++;
 				//Code for storing final room data from input areas
 				myStage.setScene(makerScene2);
 				myStage.setTitle("The McMaze Maker - Room Positioning");
-rooms++;
+				rooms++;
 
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
@@ -441,6 +442,7 @@ rooms++;
 
 				Label newNameLabel = new Label("Please name your newly created maze:");
 				TextField newNameTextField = new TextField();
+				//TODO name of the map saved
 				Button saveAndFinishButton = new Button("Save and Finish");
 
 				newNameLabel.setStyle("-fx-font: 18 arial;");
@@ -480,7 +482,7 @@ rooms++;
 				myStage.setScene(makerScene);
 				myStage.setTitle("The McMaze Maker - Rooms and Descriptions");
 
-			}
+			} 
 		});
 
 		quitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -610,10 +612,24 @@ rooms++;
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
 
-		
+		confirmRoomPositioningButton.setOnAction(new EventHandler<ActionEvent>() {//finish this room and add another room
+			public void handle(ActionEvent ae) {
+
+				//TODO save the room position
+
+			}
+		});
+
+		//TODO 
+		/*if (checkBox.indeterminateProperty() == true){//TODO easter egg setup
+			roomArray.hasMcGregor = true;
+		}*/
+
+
+
 		addRoomButton.setOnAction(new EventHandler<ActionEvent>() {//finish this room and add another room
 			public void handle(ActionEvent ae) {
-				
+
 				rooms++;
 				String rmName = roomName.getText();
 				roomNameArray.add(rmName);
@@ -622,86 +638,77 @@ rooms++;
 				roomDescriptionArray.add(rmDescription);
 				roomDesc.setText(" ");
 				roomName.setText(" ");
-				
+
 				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms)); 
 
 			}
 		});
 		String test = "test";
+
 		//ChoiceBox selectRoomChoiceBox = new ChoiceBox();//TODO
 		//ChoiceBox destinationRoomChoiceBox = new ChoiceBox();
 		//((List<String>) selectRoomChoiceBox).add(test);
-		
+
 		//0 north 8 up 9 down
 		//set north of also means set south of...
-		selectRoomButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//srcRoom = inputBox.getText();
-			}
-		});		
-		
-		selectDestinationButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//destRoom = input
-			}
-		});
-		
+
+
 		northButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 0);
 
 			}
 		});	
-		
+
 		northEastButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 1);
 			}
 		});	
-		
+
 		eastButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 2);
 			}
 		});	
-		
+
 		southEastButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 3);
 			}
 		});
-				
+
 		southButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 4);
 			}
 		});
-				
+
 		southWestButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 5);
 			}
 		});
-				
+
 		westButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 6);
 			}
 		});		
-		
+
 		northWestButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 7);
 			}
 		});
-				
+
 
 		upButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 8);
 			}
 		});
-			
+
 		downButton2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				//Edge edge = new Edge(srcRoom, destRoom, 9);
