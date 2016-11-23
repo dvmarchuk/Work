@@ -182,7 +182,7 @@ public class GUIScreens extends Application {
 		makerButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
 		quitButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
 
-	//Actions for buttons on Root Node
+	//Actions on Root Node
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
@@ -274,7 +274,7 @@ public class GUIScreens extends Application {
 		VBox inputOutputVBox = new VBox(100);
 		inputOutputVBox.getChildren().addAll(outputText, userInput);
 
-	// CSS for textfield, labels, and buttons for playNode
+	// CSS for playNode
 		userInput.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
 		userInput.setPadding(new Insets(0,0,0,25));
 		userInput.setPrefWidth(700);
@@ -399,7 +399,7 @@ public class GUIScreens extends Application {
 		addRoomButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 		submitButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 
-	//Actions for buttons on makerNode1
+	//Actions on makerNode1
 		addRoomButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 			//Code for storing data from the input areas
@@ -437,8 +437,8 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		ChoiceBox selectRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
-		ChoiceBox destinationRoomChoiceBox = new ChoiceBox();	//Change to ChoiceBox<Room> when merged
+		ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
+		ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
 		Button northWestButton2 = new Button("North-West");
 		Button northButton2 = new Button("North");
 		Button northEastButton2 = new Button("North-East");
@@ -587,17 +587,17 @@ public class GUIScreens extends Application {
 	//Initializing everything for MakerNode3
 		Label whichRoomLabel = new Label("Which Room is...");
 		Label theFirstRoomLabel = new Label("the first room:");
-		ChoiceBox cbFirstRoom = new ChoiceBox();							//ChoiceBox<Room>
+		ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
 		HBox firstRoomHBox = new HBox(30);
 		firstRoomHBox.getChildren().addAll(theFirstRoomLabel, cbFirstRoom);
 		CheckBox checkBox = new CheckBox("Enable Easter Egg Room");
 		checkBox.setIndeterminate(false);
 		Label theBonusRoomLabel = new Label("the bonus room:");
-		ChoiceBox cbBonusRoom = new ChoiceBox();							//ChoiceBox<Room>
+		ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
 		HBox bonusRoomHBox = new HBox(30);
 		bonusRoomHBox.getChildren().addAll(theBonusRoomLabel, cbBonusRoom);
 		Label theFinalRoomLabel = new Label("the final room:");
-		ChoiceBox cbFinalRoom = new ChoiceBox();							//ChoiceBox<Room>
+		ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
 		HBox finalRoomHBox = new HBox(30);
 		finalRoomHBox.getChildren().addAll(theFinalRoomLabel, cbFinalRoom);
 		Button confirmFinishedMapButton = new Button("Confirm and Name your Custom Map!");
