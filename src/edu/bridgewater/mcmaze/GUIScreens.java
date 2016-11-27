@@ -93,29 +93,97 @@ public class GUIScreens extends Application {
 		MenuItem mainScreenMenuItem = new MenuItem("Return to Main Screen");
 		mainScreenMenu.getItems().addAll(mainScreenMenuItem);
 
+		Menu sqlMenu2 = new Menu("mySQL");
+		MenuItem login2 = new MenuItem("Login");
+		sqlMenu2.getItems().addAll(login2);
+		Menu loadMenu2 = new Menu("Load");
+		MenuItem loadMap2 = new MenuItem("Load Map");
+		loadMenu2.getItems().addAll(loadMap2);
+		Menu mainScreenMenu2 = new Menu("Back");
+		MenuItem mainScreenMenuItem2 = new MenuItem("Return to Main Screen");
+		mainScreenMenu2.getItems().addAll(mainScreenMenuItem2);
+
+		Menu sqlMenu3 = new Menu("mySQL");
+		MenuItem login3 = new MenuItem("Login");
+		sqlMenu3.getItems().addAll(login3);
+		Menu loadMenu3 = new Menu("Load");
+		MenuItem loadMap3 = new MenuItem("Load Map");
+		loadMenu3.getItems().addAll(loadMap3);
+		Menu mainScreenMenu3 = new Menu("Back");
+		MenuItem mainScreenMenuItem3 = new MenuItem("Return to Main Screen");
+		mainScreenMenu3.getItems().addAll(mainScreenMenuItem3);
+
+		Menu sqlMenu4 = new Menu("mySQL");
+		MenuItem login4 = new MenuItem("Login");
+		sqlMenu4.getItems().addAll(login4);
+		Menu loadMenu4 = new Menu("Load");
+		MenuItem loadMap4 = new MenuItem("Load Map");
+		loadMenu4.getItems().addAll(loadMap4);
+		Menu mainScreenMenu4 = new Menu("Back");
+		MenuItem mainScreenMenuItem4 = new MenuItem("Return to Main Screen");
+		mainScreenMenu4.getItems().addAll(mainScreenMenuItem4);
+
+		Menu sqlMenu5 = new Menu("mySQL");
+		MenuItem login5 = new MenuItem("Login");
+		sqlMenu5.getItems().addAll(login5);
+		Menu loadMenu5 = new Menu("Load");
+		MenuItem loadMap5 = new MenuItem("Load Map");
+		loadMenu5.getItems().addAll(loadMap5);
+		Menu mainScreenMenu5 = new Menu("Back");
+		MenuItem mainScreenMenuItem5 = new MenuItem("Return to Main Screen");
+		mainScreenMenu5.getItems().addAll(mainScreenMenuItem5);
+
 		MenuBar menuBar = new MenuBar();
 		menuBar.setPadding(new Insets(0, 1250, 0, 0));
 		menuBar.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
 
 		MenuBar menuBar2 = new MenuBar();
-		menuBar2.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar2.getMenus().addAll(sqlMenu2, loadMenu2, mainScreenMenu2);
 
 		MenuBar menuBar3 = new MenuBar();
 		menuBar3.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar3.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar3.getMenus().addAll(sqlMenu3, loadMenu3, mainScreenMenu3);
 
 		MenuBar menuBar4 = new MenuBar();
 		menuBar4.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar4.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar4.getMenus().addAll(sqlMenu4, loadMenu4, mainScreenMenu4);
 
 		MenuBar menuBar5 = new MenuBar();
 		menuBar5.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar5.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar5.getMenus().addAll(sqlMenu5, loadMenu5, mainScreenMenu5);
 
 		mainScreenMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(mainScene);
-				myStage.setTitle("The McMaze");
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem4.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem5.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
 			}
 		});
 
@@ -165,6 +233,220 @@ public class GUIScreens extends Application {
 			}
 		});
 
+		login2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+					//Code for submitting credentials to mySQL Server*****************************************
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+					//Code for submitting credentials to mySQL Server*****************************************
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login4.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+					//Code for submitting credentials to mySQL Server*****************************************
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login5.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+					//Code for submitting credentials to mySQL Server*****************************************
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		loadMap.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Needs Code to load map ********************************
+			}
+		});
+
+		loadMap2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Needs Code to load map******************************
+			}
+		});
+
+		loadMap3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Needs Code to load map**********************************
+			}
+		});
+
+		loadMap4.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Needs Code to load map*************************************
+			}
+		});
+
+		loadMap5.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				//Needs Code to load map*********************************
+			}
+		});
+
 //**********************************************************************************************************************************  MENU BAR
 
 //**********************************************************************************************************************************  ROOT NODE
@@ -184,8 +466,8 @@ public class GUIScreens extends Application {
 
 		VBox introVBox = new VBox(60);
 		introVBox.setPadding(new Insets(130, 1100, 50, 60));
-		introVBox.getChildren().addAll(titleLabel, playButton, makerButton, quitButton);		
-		
+		introVBox.getChildren().addAll(titleLabel, playButton, makerButton, quitButton);
+
 		dropShadow.setOffsetY(3.5);
 		dropShadow.setColor(Color.color(.4, .4, .4));
 		titleLabel.setEffect(dropShadow);
@@ -342,7 +624,7 @@ public class GUIScreens extends Application {
 		helpLabel.setAlignment(Pos.CENTER);
 		helpButtonVBox.setAlignment(Pos.CENTER);
 		upDownLabeledVBox.setAlignment(Pos.CENTER);
-		
+
 
 		// Actions for Buttons on PlayNode
 				helpButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -497,7 +779,7 @@ public class GUIScreens extends Application {
 						        });
 					}
 				});
-				
+
 				userInput.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
 							print(userInput.getText());
@@ -830,7 +1112,7 @@ public class GUIScreens extends Application {
 				});
 			}
 		});
-		
+
 		checkBox.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				if(checkBox.isSelected()){
@@ -843,7 +1125,7 @@ public class GUIScreens extends Application {
 				}
 			}
 		});
-			
+
 
 //**********************************************************************************************************************************  MAKER NODE 3
 
@@ -861,7 +1143,6 @@ public class GUIScreens extends Application {
 		makerNode3.setTop(menuBar5);
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
-
 	}
 
 //**********************************************************************************************************************************  METHODS
@@ -875,6 +1156,6 @@ public class GUIScreens extends Application {
 	public void print(String string){
 		outputText.appendText(string + "\n");
 	}
-	
+
 //**********************************************************************************************************************************  METHODS
 }
