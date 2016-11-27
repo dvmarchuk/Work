@@ -1,5 +1,7 @@
 package edu.bridgewater.mcmaze;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a room in memory
  * 
@@ -7,7 +9,7 @@ package edu.bridgewater.mcmaze;
  *
  */
 public class Room {
-	public static int roomCount; // TODO increment roomIDs
+	private static ArrayList<Integer> usedIDs;
 	private String roomName, roomDesc;
 	private boolean isStartingRoom, isEndingRoom, hasMcGregor;
 	private int roomID;
@@ -58,7 +60,7 @@ public class Room {
 		setStartingRoom(isStartingRoom);
 		setEndingRoom(isEndingRoom);
 		setHasMcGregor(hasMcGregor);
-		setRoomID(-1); // TODO change this
+		setRoomID(generateRoomID());
 	}
 
 	/**
@@ -145,10 +147,27 @@ public class Room {
 
 	/**
 	 * @param roomID
-	 *            the roomID to set
+	 *            the unique roomID
 	 */
 	public void setRoomID(int roomID) {
+		// ensure list is not null
+		if (usedIDs == null)
+			usedIDs = new ArrayList<>();
+		// add ID to list of used IDs
+		usedIDs.add(roomID);
+
 		this.roomID = roomID;
+	}
+
+	/**
+	 * @return a unique, unused roomID
+	 */
+	public int generateRoomID() {
+		int id = 0;
+		do {
+			id++;
+		} while (usedIDs.contains(id));
+		return id;
 	}
 
 	/*
