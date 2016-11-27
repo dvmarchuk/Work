@@ -1,5 +1,7 @@
 package edu.bridgewater.mcmaze;
 
+import java.util.ArrayList;
+
 /**
  * This class represents an edge from the adjacency list in the database
  * 
@@ -7,7 +9,7 @@ package edu.bridgewater.mcmaze;
  *
  */
 public class Edge {
-	private static int edgeCount; // TODO generate edgeIDs
+	private static ArrayList<Integer> usedIDs;
 	private int firstNode, secondNode, edgeID;
 	private int edgeType;
 
@@ -34,6 +36,7 @@ public class Edge {
 	 *            <li>9 - down</li>
 	 *            </ul>
 	 */
+	@Deprecated
 	public Edge(int firstNode, int secondNode, int edgeType) {
 		setFirstNode(firstNode);
 		setSecondNode(secondNode);
@@ -77,14 +80,30 @@ public class Edge {
 	 * constructor (if using map maker)
 	 * 
 	 * @param firstNode
+	 *            the room object for the first node
 	 * @param secondNode
+	 *            the room object for the second node. these objects CAN be the
+	 *            same, though this might be confusing
 	 * @param edgeType
+	 *            the relationship between the two rooms
+	 *            <ul>
+	 *            <li>0 - north</li>
+	 *            <li>1 - north-east</li>
+	 *            <li>2 - east</li>
+	 *            <li>3 - south-east</li>
+	 *            <li>4 - south</li>
+	 *            <li>5 - south-west</li>
+	 *            <li>6 - west</li>
+	 *            <li>7 - north-west</li>
+	 *            <li>8 - up</li>
+	 *            <li>9 - down</li>
+	 *            </ul>
 	 */
 	public Edge(Room firstNode, Room secondNode, int edgeType) {
 		setFirstNode(firstNode.getRoomID());
 		setSecondNode(secondNode.getRoomID());
 		setEdgeType(edgeType);
-		setEdgeID(-1); // TODO change this
+		setEdgeID(generateEdgeID());
 	}
 
 	/**
@@ -114,7 +133,24 @@ public class Edge {
 	 *            the edgeID to set
 	 */
 	public void setEdgeID(int edgeID) {
+		// ensure list is not null
+		if (usedIDs == null)
+			usedIDs = new ArrayList<>();
+		// add ID to list of used IDs
+		usedIDs.add(edgeID);
+
 		this.edgeID = edgeID;
+	}
+
+	/**
+	 * @return a unique, unused edgeID
+	 */
+	public int generateEdgeID() {
+		int id = 0;
+		do {
+			id++;
+		} while (usedIDs.contains(id));
+		return id;
 	}
 
 	/**
@@ -145,5 +181,16 @@ public class Edge {
 	 */
 	public void setFirstNode(int firstNode) {
 		this.firstNode = firstNode;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// example: 1 : 56 : 4 : 8
+		return getEdgeID() + " : " + getFirstNode() + " : " + getSecondNode() + " : " + getEdgeType();
 	}
 }
