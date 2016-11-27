@@ -1,51 +1,51 @@
 package edu.bridgewater.mcmaze;
 
-import java.io.File;
-import java.io.IOException;
+import java.awt.Choice;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JTextPane;
+import com.sun.corba.se.spi.orbutil.fsm.Action;
 
-import javafx.animation.FadeTransition;
-import javafx.application.*;
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.*;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.stage.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * The main class for the game application. this class handles the GUI and all
  * associated events
  *
- * @author Jason Laatz, Alan Bowman, Dennis Marchuk
+ * @author Jason Laatz, Dennis Marchuk, Charles German, Alan Bowman
  *
  */
-@SuppressWarnings("unused")
 public class GUIScreens extends Application {
-	int rooms = 0;
-	private static final String ArrayList = null;
-private	ArrayList<String> roomDescriptionArray = new ArrayList<String>();
-private	ArrayList<String> roomNameArray = new ArrayList<String>();
+	private int rooms = 0;
+	private ArrayList<Room> roomList = new ArrayList<>();
+	private ArrayList<Edge> edgeList = new ArrayList<>();
 	private TextArea outputText;
+	private Room srcRoom, destRoom;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -55,19 +55,22 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		myStage.setTitle("The McMaze - Title Screen");
 		myStage.setResizable(false);
 
-	//Nodes
+		// Nodes
 		FlowPane rootNode = new FlowPane();
 		rootNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		GridPane playNode = new GridPane();
 		playNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode = new BorderPane();
-		makerNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode
+				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode2 = new BorderPane();
-		makerNode2.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode2
+				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode3 = new BorderPane();
-		makerNode3.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode3
+				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-	//Scenes
+		// Scenes
 		Scene mainScene = new Scene(rootNode, 1300, 900);
 		Scene playScene = new Scene(playNode, 1300, 900);
 		Scene makerScene = new Scene(makerNode, 1300, 900);
@@ -75,13 +78,14 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		Scene makerScene3 = new Scene(makerNode3, 1300, 900);
 		myStage.setScene(mainScene);
 
-	//Setting constraints for playNode's GridPane
+		// Setting constraints for playNode's GridPane
 		GridPane.setColumnIndex(playNode, 0);
 		GridPane.setRowIndex(playNode, 0);
 		GridPane.setColumnSpan(playNode, 13);
 		GridPane.setRowSpan(playNode, 9);
 
-//**********************************************************************************************************************************  MENU BAR
+		// **********************************************************************************************************************************
+		// MENU BAR
 
 		Menu sqlMenu = new Menu("mySQL");
 		MenuItem login = new MenuItem("Login");
@@ -155,7 +159,8 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-					//Code for submitting credentials to mySQL Server*****************
+						// Code for submitting credentials to mySQL
+						// Server*****************
 						credPopup.close();
 					}
 				});
@@ -166,17 +171,19 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 			}
 		});
 
-//**********************************************************************************************************************************  MENU BAR
+		// **********************************************************************************************************************************
+		// MENU BAR
 
-//**********************************************************************************************************************************  ROOT NODE
+		// **********************************************************************************************************************************
+		// ROOT NODE
 
-	//Initializing Buttons and Label for rootNode
+		// Initializing Buttons and Label for rootNode
 		Label titleLabel = new Label("The McMaze");
 		Button playButton = new Button("Play");
 		Button makerButton = new Button("Map Maker");
 		Button quitButton = new Button("Quit");
 
-	//CSS for rootNode
+		// CSS for rootNode
 		titleLabel.setStyle("-fx-font-size: 60 arial;");
 		titleLabel.setTextFill(Color.BLUE);
 		titleLabel.setPadding(new Insets(70, 1100, 70, 40));
@@ -184,7 +191,7 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		makerButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
 		quitButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
 
-	//Actions on Root Node
+		// Actions on Root Node
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
@@ -222,18 +229,9 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 				vbox.getChildren().addAll(exitLabel, hbox);
 				vbox.setPadding(new Insets(30, 30, 30, 30));
 
-				exit.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
+				exit.setOnAction(eh -> System.exit(0));
 
-						System.exit(0);
-					}
-				});
-
-				cancel.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						exitPopup.close();
-					}
-				});
+				cancel.setOnAction(eh -> exitPopup.close());
 
 				Scene exitScene = new Scene(vbox);
 				exitPopup.setScene(exitScene);
@@ -241,11 +239,13 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 			}
 		});
 
-//**********************************************************************************************************************************  ROOT NODE
+		// **********************************************************************************************************************************
+		// ROOT NODE
 
-//**********************************************************************************************************************************  PLAY NODE
+		// **********************************************************************************************************************************
+		// PLAY NODE
 
-	// Initializing everything for playNode
+		// Initializing everything for playNode
 		TextField userInput = new TextField();
 		outputText = new TextArea();
 		Button northWestButton = new Button("North-West");
@@ -276,9 +276,9 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		VBox inputOutputVBox = new VBox(100);
 		inputOutputVBox.getChildren().addAll(outputText, userInput);
 
-	// CSS for playNode
+		// CSS for playNode
 		userInput.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
-		userInput.setPadding(new Insets(0,0,0,25));
+		userInput.setPadding(new Insets(0, 0, 0, 25));
 		userInput.setPrefWidth(700);
 		outputText.setStyle("-fx-padding: 5; -fx-font: 22 arial;");
 		outputText.setEditable(false);
@@ -306,72 +306,26 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		upButton.setMinSize(100, 50);
 		downButton.setMinSize(100, 50);
 
-		// Directional button event listeners for PlayNode
-				northButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(0);
-					}
-				});
+		// Directional button event listeners for
+		// PlayNode**************************************************************************************************************************
+		northButton.setOnAction(eh -> movePlayer(0));
+		northEastButton.setOnAction(eh -> movePlayer(1));
+		eastButton.setOnAction(eh -> movePlayer(2));
+		southEastButton.setOnAction(eh -> movePlayer(3));
+		southButton.setOnAction(eh -> movePlayer(4));
+		southWestButton.setOnAction(eh -> movePlayer(5));
+		westButton.setOnAction(eh -> movePlayer(6));
+		northWestButton.setOnAction(eh -> movePlayer(7));
+		upButton.setOnAction(eh -> movePlayer(8));
+		downButton.setOnAction(eh -> movePlayer(9));
 
-				northEastButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(1);
-					}
-				});
+		// **********************************************************************************************************************************
+		// PLAY NODE
 
-				eastButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(2);
-					}
-				});
+		// **********************************************************************************************************************************
+		// MAKER NODE 1
 
-				southEastButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(3);
-					}
-				});
-
-				southButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(4);
-					}
-				});
-
-				southWestButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(5);
-					}
-				});
-
-				westButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(6);
-					}
-				});
-
-				northWestButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(7);
-					}
-				});
-
-				upButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(8);
-					}
-				});
-
-				downButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(9);
-					}
-				});
-
-//**********************************************************************************************************************************  PLAY NODE
-
-//**********************************************************************************************************************************  MAKER NODE 1
-
-	// Initializing everything for makerNode1
+		// Initializing everything for makerNode1
 		Label nameOfRoom = new Label("Name of Room : ");
 		TextField roomName = new TextField();
 		Label descOfRoom = new Label("Room Desription : ");
@@ -392,7 +346,17 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		confirmRoomHBox.setAlignment(Pos.BASELINE_CENTER);
 		confirmRoomHBox.getChildren().addAll(addRoomButton, submitButton);
 
-	//CSS for makerNode1
+		// Initializing everything for Dennis' code (not sure where this
+		// *should* go)
+		ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
+		ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
+		ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
+		ChoiceBox<Room> cbSecondRoom = new ChoiceBox<>();
+		ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
+		ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
+		// TODO make this code integrate nicely
+
+		// CSS for makerNode1
 		nameOfRoom.setStyle("-fx-font: 40 arial;");
 		roomName.setStyle("-fx-padding: 20; -fx-font: 30 arial;");
 		BorderPane.setAlignment(nameHBox, Pos.CENTER);
@@ -401,46 +365,71 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		addRoomButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 		submitButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 
-	//Actions on makerNode1
+		// Actions on makerNode1
 		addRoomButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-			//Code for storing data from the input areas
+				// Code for storing data from the input areas
 				myStage.setScene(makerScene);
 				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
-				roomDesc.setText("");
-				roomName.setText("");
-			//(Str roomName, Str roomDesc, bool isStartingRoom, bool isEndingRoom, bool hasMcGregor, int roomID)
-				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms));
+				roomDesc.setText(" ");
+				roomName.setText(" ");
+				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
+				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFirstRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbSecondRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFinalRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbBonusRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
 			}
 		});
 
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
+				// Code for storing final room data from input areas
 				myStage.setScene(makerScene2);
 				myStage.setTitle("The McMaze Maker - Room Positioning");
 				rooms++;
-
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
-				roomDesc.setText("");
-				roomName.setText("");
-			//(Str roomName, Str roomDesc, bool isStartingRoom, bool isEndingRoom, bool hasMcGregor, int roomID)
-				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms));
+				roomDesc.setText(" ");
+				roomName.setText(" ");
+				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms)); // (String
+																							// roomName,
+																							// String
+																							// roomDesc,
+																							// boolean
+																							// isStartingRoom,
+																							// boolean
+																							// isEndingRoom,
+																							// boolean
+																							// hasMcGregor,
+																							// final
+																							// int
+																							// roomID)
+				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFirstRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbSecondRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFinalRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbBonusRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
 			}
 		});
 
-//**********************************************************************************************************************************  MAKER NODE 1
+		// **********************************************************************************************************************************
+		// MAKER NODE 1
 
-//**********************************************************************************************************************************  MAKER NODE 2
+		// **********************************************************************************************************************************
+		// MAKER NODE 2
 
-	// Initializing everything for makerNode2
+		// Initializing everything for makerNode2
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
-		ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
+		// TODO integrate dennis's code better
+		// ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
+		// ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
 		Button northWestButton2 = new Button("North-West");
 		Button northButton2 = new Button("North");
 		Button northEastButton2 = new Button("North-East");
@@ -471,10 +460,10 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		HBox allUpDownHBox = new HBox(50);
 		allUpDownHBox.getChildren().addAll(allUpHBox, downButton2);
 		VBox finalVBox = new VBox(30);
-		finalVBox.getChildren().addAll(selectRoomLabel, selectRoomChoiceBox, fillerText1,
-			allUpDownHBox, fillerText2, destinationRoomChoiceBox, confirmRoomPositioningButton, nextNodeButton);
+		finalVBox.getChildren().addAll(selectRoomLabel, selectRoomChoiceBox, fillerText1, allUpDownHBox, fillerText2,
+				destinationRoomChoiceBox, confirmRoomPositioningButton, nextNodeButton);
 
-	//CSS for makerNode2
+		// CSS for makerNode2
 		selectRoomLabel.setStyle("-fx-font: 18 arial;");
 		fillerText1.setStyle("-fx-font: 18 arial;");
 		fillerText2.setStyle("-fx-font: 18 arial;");
@@ -509,104 +498,67 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		upButton2.setMinSize(100, 50);
 		downButton2.setMinSize(100, 50);
 
-	//Actions for buttons on MakerScreen2
+		// Actions for buttons on MakerScreen2
+		confirmRoomPositioningButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				srcRoom = selectRoomChoiceBox.getValue();
+				destRoom = destinationRoomChoiceBox.getValue();
+				selectRoomChoiceBox.setValue(null);
+				destinationRoomChoiceBox.setValue(null);
+			}
+		});
+		// TODO setHasMcGregor(true) somewhere
+
 		nextNodeButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-			//Code for storing all room positioning
+				// Code for storing all room positioning
 				myStage.setScene(makerScene3);
 				myStage.setTitle("The McMaze Maker - Event Rooms");
 			}
 		});
 
-		//0 north 8 up 9 down
-		//set north of also means set south of...
-				northButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 0);
+		// 0 north 8 up 9 down
+		// set north of also means set south of...
+		northButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 0)));
+		northEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 1)));
+		eastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 2)));
+		southEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 3)));
+		southButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 4)));
+		southWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 5)));
+		westButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 6)));
+		northWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 7)));
+		upButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 8)));
+		downButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 9)));
 
-					}
-				});
+		// **********************************************************************************************************************************
+		// MAKER NODE 2
 
-				northEastButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 1);
-					}
-				});
+		// **********************************************************************************************************************************
+		// MAKER NODE 3
 
-				eastButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 2);
-					}
-				});
-
-				southEastButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 3);
-					}
-				});
-
-				southButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 4);
-					}
-				});
-
-				southWestButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 5);
-					}
-				});
-
-				westButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 6);
-					}
-				});
-
-				northWestButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 7);
-					}
-				});
-
-
-				upButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 8);
-					}
-				});
-
-				downButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 9);
-					}
-				});
-
-//**********************************************************************************************************************************  MAKER NODE 2
-
-//**********************************************************************************************************************************  MAKER NODE 3
-
-	//Initializing everything for MakerNode3
+		// Initializing everything for MakerNode3
 		Label whichRoomLabel = new Label("Which Room is...");
 		Label theFirstRoomLabel = new Label("the first room:");
-		ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
+		// TODO integrate dennis's code better
+		// ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
 		HBox firstRoomHBox = new HBox(30);
 		firstRoomHBox.getChildren().addAll(theFirstRoomLabel, cbFirstRoom);
 		CheckBox checkBox = new CheckBox("Enable Easter Egg Room");
 		checkBox.setIndeterminate(false);
 		Label theBonusRoomLabel = new Label("the bonus room:");
-		ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
+		// ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
 		HBox bonusRoomHBox = new HBox(30);
 		bonusRoomHBox.getChildren().addAll(theBonusRoomLabel, cbBonusRoom);
 		Label theFinalRoomLabel = new Label("the final room:");
-		ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
+		// ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
 		HBox finalRoomHBox = new HBox(30);
 		finalRoomHBox.getChildren().addAll(theFinalRoomLabel, cbFinalRoom);
 		Button confirmFinishedMapButton = new Button("Confirm and Name your Custom Map!");
 		VBox allMakerNode3ChoicesVBox = new VBox(40);
-		allMakerNode3ChoicesVBox.getChildren().addAll(whichRoomLabel, firstRoomHBox, checkBox, bonusRoomHBox, finalRoomHBox, confirmFinishedMapButton);
+		allMakerNode3ChoicesVBox.getChildren().addAll(whichRoomLabel, firstRoomHBox, checkBox, bonusRoomHBox,
+				finalRoomHBox, confirmFinishedMapButton);
 
-	//CSS for MakerNode3
+		// CSS for MakerNode3
 		firstRoomHBox.setAlignment(Pos.CENTER);
 		bonusRoomHBox.setAlignment(Pos.CENTER);
 		finalRoomHBox.setAlignment(Pos.CENTER);
@@ -620,7 +572,7 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 		theFinalRoomLabel.setStyle("-fx-padding: 2; -fx-font: 20 arial;");
 		confirmFinishedMapButton.setStyle("-fx-padding: 8; -fx-font: 24 arial;");
 
-	//Actions for buttons on MakerScreen3
+		// Actions for buttons on MakerScreen3
 		confirmFinishedMapButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				Stage nameNewMaze = new Stage();
@@ -648,6 +600,10 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 
 				saveAndFinishButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
+						// TODO write to file
+						// send room/edge arrays somewhere
+						// make map object
+						// map.save()
 						nameNewMaze.close();
 						myStage.setScene(mainScene);
 						myStage.setTitle("The McMaze - Title Screen");
@@ -656,9 +612,10 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 			}
 		});
 
-//**********************************************************************************************************************************  MAKER NODE 3
+		// **********************************************************************************************************************************
+		// MAKER NODE 3
 
-//Setting everything onto the nodes to be displayed
+		// Setting everything onto the nodes to be displayed
 		rootNode.getChildren().addAll(menuBar, titleLabel, introVBox);
 		playNode.add(menuBar2, 0, 0, 13, 1);
 		playNode.add(inputOutputVBox, 0, 2);
@@ -678,16 +635,19 @@ private	ArrayList<String> roomNameArray = new ArrayList<String>();
 
 	}
 
-//**********************************************************************************************************************************  METHODS
+	// **********************************************************************************************************************************
+	// METHODS
 	// Moves the player based on an int direction
 	// 0 North 1 Northeast 2 East etc...
 	public void movePlayer(int direction) {
-		//playerObject.movePlayer(direction);
+		// playerObject.movePlayer(direction);
+		// TODO implement player moving logic
 	}
 
-public void print(String text){
-outputText.appendText(text + '\n');
-}
+	public void print(String text) {
+		outputText.appendText(text + '\n');
+	}
 
-//**********************************************************************************************************************************  METHODS
+	// **********************************************************************************************************************************
+	// METHODS
 }
