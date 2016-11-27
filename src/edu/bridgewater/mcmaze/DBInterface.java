@@ -2,7 +2,6 @@ package edu.bridgewater.mcmaze;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.Connection;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
  */
 public class DBInterface {
 	private static Connection con;
-	private static Object[][] queryResults;
+	// private static Object[][] queryResults;
 	private static Map map;
 	// private static String mySqlUser, mySqlPass;
 
@@ -195,7 +194,6 @@ public class DBInterface {
 	 *             if there is a SQL problem
 	 */
 	public static Room getAdjacentRoomByEdgeType(final int roomID, int edgeType) throws SQLException {
-		// TODO add handling for if the room can't be found
 		PreparedStatement ps = con.prepareStatement("SELECT EdgeID, FirstNode, SecondNode, EdgeType FROM "
 				+ map.getName() + ".Edges WHERE EdgeType='" + edgeType + "';");
 		ResultSet rs = ps.executeQuery();
@@ -224,7 +222,8 @@ public class DBInterface {
 	 * 
 	 * @param roomID
 	 *            the id of the room which MUST be in the edges
-	 * @return all edges which contain the given room id
+	 * @return all edges which contain the given room id or {@code null} if no
+	 *         edges can be found
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
@@ -236,7 +235,10 @@ public class DBInterface {
 		while (rs.next())
 			edges.add(new Edge(rs.getInt("FirstNode"), rs.getInt("SecondNode"), rs.getInt("EdgeType"),
 					rs.getInt("EdgeID")));
-		return edges.toArray(new Edge[edges.size()]);
+		if (edges.size() == 0)
+			return null;
+		else
+			return edges.toArray(new Edge[edges.size()]);
 	}
 
 	/**
@@ -297,21 +299,19 @@ public class DBInterface {
 	}
 
 	/**
-	 * @return an array containing all ending rooms for the maze
+	 * @return the ending room
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
-	public static Room[] getEndingRooms() throws SQLException {
+	public static Room getEndingRooms() throws SQLException {
 		// query the database
 		PreparedStatement ps = con
 				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "
 						+ map.getName() + ".Rooms WHERE IsEndingRoom='1';");
 		ResultSet rs = ps.executeQuery();
-		// get the ending rooms
-		ArrayList<Room> rooms = new ArrayList<>();
-		while (rs.next())
-			rooms.add(new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
-					rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID")));
-		return rooms.toArray(new Room[rooms.size()]);
+		// get the starting room
+		rs.next();
+		return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
+				rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
 	}
 }
