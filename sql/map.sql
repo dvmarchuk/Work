@@ -1,7 +1,9 @@
 /* create the database for the map if it doesn't exist, this requires MySQL admin credentials */
-CREATE DATABASE /* map name */ IF NOT EXISTS;
+CREATE DATABASE /* map name */;
 
 /* create the tables in the database */
+USE /* map name */
+
 CREATE TABLE Rooms
 (
 RoomID INT NOT NULL,
@@ -25,4 +27,4 @@ PRIMARY KEY (EdgeID)
 );
 
 /* delete a map, this requires MySQL admin permissions */
-DROP DATABASE /* map name */ IF EXISTS;
+DROP DATABASE /* map name */;

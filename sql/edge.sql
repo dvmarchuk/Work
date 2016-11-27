@@ -1,6 +1,6 @@
 /* add an edge to the database */
-INSERT INTO /* map name */.Edges (FirstNode, SecondNode, EdgeType)
-VALUES (/* the first room ID */, /* the second room ID */, /* north, south, up, down, etc. */);
+INSERT INTO /* map name */.Edges (EdgeID, FirstNode, SecondNode, EdgeType)
+VALUES (/* the edge id */, /* the first room ID */, /* the second room ID */, /* 0...9 */);
 
 /* delete an edge from the database */
 DELETE FROM /* map name */.Edges WHERE EdgeID='/* the edge id */';
