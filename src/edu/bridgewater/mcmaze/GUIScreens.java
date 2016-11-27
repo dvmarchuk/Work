@@ -373,8 +373,8 @@ public class GUIScreens extends Application {
 				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
-				roomDesc.setText(" ");
-				roomName.setText(" ");
+				roomDesc.setText("");
+				roomName.setText("");
 				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
 				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
 				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
@@ -393,8 +393,8 @@ public class GUIScreens extends Application {
 				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
-				roomDesc.setText(" ");
-				roomName.setText(" ");
+				roomDesc.setText("");
+				roomName.setText("");
 				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms)); // (String
 																							// roomName,
 																							// String
@@ -600,10 +600,7 @@ public class GUIScreens extends Application {
 
 				saveAndFinishButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-						// TODO write to file
-						// send room/edge arrays somewhere
-						// make map object
-						// map.save()
+						saveMap();
 						nameNewMaze.close();
 						myStage.setScene(mainScene);
 						myStage.setTitle("The McMaze - Title Screen");
@@ -632,22 +629,25 @@ public class GUIScreens extends Application {
 		makerNode3.setTop(menuBar5);
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
-
 	}
 
 	// **********************************************************************************************************************************
 	// METHODS
 	// Moves the player based on an int direction
 	// 0 North 1 Northeast 2 East etc...
-	public void movePlayer(int direction) {
+	private void movePlayer(int direction) {
 		// playerObject.movePlayer(direction);
 		// TODO implement player moving logic
+	}
+	private void saveMap(){
+		// TODO write to file
+		// send room/edge arrays somewhere
+		// make map object
+		// map.save()
 	}
 
 	public void print(String text) {
 		outputText.appendText(text + '\n');
 	}
-
-	// **********************************************************************************************************************************
-	// METHODS
+	// TODO make sure that all methods have javadoc comments
 }
