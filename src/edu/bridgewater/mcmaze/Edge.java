@@ -35,10 +35,10 @@ public class Edge {
 	 *            </ul>
 	 */
 	public Edge(int firstNode, int secondNode, int edgeType) {
-		this.firstNode = firstNode;
-		this.secondNode = secondNode;
-		this.edgeType = edgeType;
-		this.edgeID = -1;
+		setFirstNode(firstNode);
+		setSecondNode(secondNode);
+		setEdgeType(edgeType);
+		setEdgeID(-1); // TODO change this
 	}
 
 	/**
@@ -67,14 +67,54 @@ public class Edge {
 	 *            the id for this edge
 	 */
 	public Edge(int firstNode, int secondNode, int edgeType, int edgeID) {
-		this.firstNode = firstNode;
-		this.secondNode = secondNode;
-		this.edgeType = edgeType;
-		this.edgeID = edgeID;
+		setFirstNode(firstNode);
+		setSecondNode(secondNode);
+		setEdgeType(edgeType);
+		setEdgeID(edgeID);
 	}
 
+	/**
+	 * constructor (if using map maker)
+	 * 
+	 * @param firstNode
+	 * @param secondNode
+	 * @param edgeType
+	 */
 	public Edge(Room firstNode, Room secondNode, int edgeType) {
-		// TODO fill out constructor
+		setFirstNode(firstNode.getRoomID());
+		setSecondNode(secondNode.getRoomID());
+		setEdgeType(edgeType);
+		setEdgeID(-1); // TODO change this
+	}
+
+	/**
+	 * @return the edgeType
+	 */
+	public int getEdgeType() {
+		return edgeType;
+	}
+
+	/**
+	 * @param edgeType
+	 *            the edgeType to set
+	 */
+	public void setEdgeType(int edgeType) {
+		this.edgeType = edgeType;
+	}
+
+	/**
+	 * @return the edgeID
+	 */
+	public int getEdgeID() {
+		return edgeID;
+	}
+
+	/**
+	 * @param edgeID
+	 *            the edgeID to set
+	 */
+	public void setEdgeID(int edgeID) {
+		this.edgeID = edgeID;
 	}
 
 	/**
@@ -85,6 +125,14 @@ public class Edge {
 	}
 
 	/**
+	 * @param secondNode
+	 *            the secondNode to set
+	 */
+	public void setSecondNode(int secondNode) {
+		this.secondNode = secondNode;
+	}
+
+	/**
 	 * @return the firstNode
 	 */
 	public int getFirstNode() {
@@ -92,9 +140,10 @@ public class Edge {
 	}
 
 	/**
-	 * @return the edgeType
+	 * @param firstNode
+	 *            the firstNode to set
 	 */
-	public int getEdgeType() {
-		return edgeType;
+	public void setFirstNode(int firstNode) {
+		this.firstNode = firstNode;
 	}
 }

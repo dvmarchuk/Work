@@ -35,7 +35,7 @@ public class Room {
 		setStartingRoom(isStartingRoom);
 		setEndingRoom(isEndingRoom);
 		setHasMcGregor(hasMcGregor);
-		this.roomID = roomID;
+		setRoomID(roomID);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class Room {
 		setStartingRoom(isStartingRoom);
 		setEndingRoom(isEndingRoom);
 		setHasMcGregor(hasMcGregor);
-		this.roomID = -1;
+		setRoomID(-1); // TODO change this
 	}
 
 	/**
@@ -143,6 +143,14 @@ public class Room {
 		return roomID;
 	}
 
+	/**
+	 * @param roomID
+	 *            the roomID to set
+	 */
+	public void setRoomID(int roomID) {
+		this.roomID = roomID;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -150,6 +158,7 @@ public class Room {
 	 */
 	@Override
 	public String toString() {
-		return getRoomID() + getRoomName();
+		// example: 1 : Kitchen
+		return getRoomID() + " : " + getRoomName();
 	}
 }
