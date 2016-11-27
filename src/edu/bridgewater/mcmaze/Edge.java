@@ -7,7 +7,8 @@ package edu.bridgewater.mcmaze;
  *
  */
 public class Edge {
-	private final int firstNode, secondNode, edgeID;
+	private static int edgeCount; // TODO generate edgeIDs
+	private int firstNode, secondNode, edgeID;
 	private int edgeType;
 
 	/**
@@ -33,15 +34,15 @@ public class Edge {
 	 *            <li>9 - down</li>
 	 *            </ul>
 	 */
-	public Edge(final int firstNode, final int secondNode, int edgeType) {
+	public Edge(int firstNode, int secondNode, int edgeType) {
 		this.firstNode = firstNode;
 		this.secondNode = secondNode;
 		this.edgeType = edgeType;
-		edgeID = -1;
+		this.edgeID = -1;
 	}
 
 	/**
-	 * constructor
+	 * constructor (if loading from DB)
 	 * 
 	 * @param firstNode
 	 *            the room id of a room in this edge
@@ -63,13 +64,17 @@ public class Edge {
 	 *            <li>9 - down</li>
 	 *            </ul>
 	 * @param edgeID
-	 *            the id fo this edge
+	 *            the id for this edge
 	 */
-	public Edge(final int firstNode, final int secondNode, int edgeType, final int edgeID) {
+	public Edge(int firstNode, int secondNode, int edgeType, int edgeID) {
 		this.firstNode = firstNode;
 		this.secondNode = secondNode;
 		this.edgeType = edgeType;
 		this.edgeID = edgeID;
+	}
+
+	public Edge(Room firstNode, Room secondNode, int edgeType) {
+		// TODO fill out constructor
 	}
 
 	/**
