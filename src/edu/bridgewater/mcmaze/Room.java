@@ -7,12 +7,13 @@ package edu.bridgewater.mcmaze;
  *
  */
 public class Room {
+	public static int roomCount; // TODO increment roomIDs
 	private String roomName, roomDesc;
 	private boolean isStartingRoom, isEndingRoom, hasMcGregor;
-	private final int roomID;
+	private int roomID;
 
 	/**
-	 * constructor
+	 * constructor (if loading from DB)
 	 * 
 	 * @param roomName
 	 *            the name of the room
@@ -28,13 +29,36 @@ public class Room {
 	 *            the ID of this room
 	 */
 	public Room(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor,
-			final int roomID) {
-		this.setRoomName(roomName);
-		this.setRoomDesc(roomDesc);
-		this.setStartingRoom(isStartingRoom);
-		this.setEndingRoom(isEndingRoom);
-		this.setHasMcGregor(hasMcGregor);
+			int roomID) {
+		setRoomName(roomName);
+		setRoomDesc(roomDesc);
+		setStartingRoom(isStartingRoom);
+		setEndingRoom(isEndingRoom);
+		setHasMcGregor(hasMcGregor);
 		this.roomID = roomID;
+	}
+
+	/**
+	 * constructor (if creating in editor)
+	 * 
+	 * @param roomName
+	 *            the name of the room
+	 * @param roomDesc
+	 *            the description for the room
+	 * @param isStartingRoom
+	 *            whether or not this room is the first room in the maze
+	 * @param isEndingRoom
+	 *            whether or not this room is an exit for the maze
+	 * @param hasMcGregor
+	 *            whether or not this room contains the easter egg
+	 */
+	public Room(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor) {
+		setRoomName(roomName);
+		setRoomDesc(roomDesc);
+		setStartingRoom(isStartingRoom);
+		setEndingRoom(isEndingRoom);
+		setHasMcGregor(hasMcGregor);
+		this.roomID = -1;
 	}
 
 	/**
@@ -117,5 +141,15 @@ public class Room {
 	 */
 	public int getRoomID() {
 		return roomID;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getRoomID() + getRoomName();
 	}
 }
