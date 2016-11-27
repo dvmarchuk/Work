@@ -1,4 +1,5 @@
 package edu.bridgewater.mcmaze;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,8 +43,9 @@ import javafx.scene.shape.Rectangle;
 public class GUIScreens extends Application {
 	int rooms = 0;
 	private static final String ArrayList = null;
-	ArrayList<String> roomDescriptionArray = new ArrayList<String>();
-	ArrayList<String> roomNameArray = new ArrayList<String>();
+private	ArrayList<String> roomDescriptionArray = new ArrayList<String>();
+private	ArrayList<String> roomNameArray = new ArrayList<String>();
+	private TextArea outputText;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -245,7 +247,7 @@ public class GUIScreens extends Application {
 
 	// Initializing everything for playNode
 		TextField userInput = new TextField();
-		TextArea outputText = new TextArea();
+		outputText = new TextArea();
 		Button northWestButton = new Button("North-West");
 		Button northButton = new Button("North");
 		Button northEastButton = new Button("North-East");
@@ -682,6 +684,10 @@ public class GUIScreens extends Application {
 	public void movePlayer(int direction) {
 		//playerObject.movePlayer(direction);
 	}
+
+public void print(String text){
+outputText.appendText(text + '\n');
+}
 
 //**********************************************************************************************************************************  METHODS
 }
