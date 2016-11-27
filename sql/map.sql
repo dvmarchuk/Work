@@ -4,7 +4,7 @@ CREATE DATABASE /* map name */ IF NOT EXISTS;
 /* create the tables in the database */
 CREATE TABLE Rooms
 (
-RoomID INT NOT NULL AUTO_INCREMENT,
+RoomID INT NOT NULL,
 RoomName VARCHAR(255) NOT NULL,
 RoomDesc TEXT,
 HasMcGregor BOOLEAN,
@@ -15,7 +15,7 @@ PRIMARY KEY (RoomID)
 
 CREATE TABLE Edges
 (
-EdgeID INT NOT NULL AUTO_INCREMENT,
+EdgeID INT NOT NULL,
 FirstNode INT NOT NULL,
 SecondNode INT NOT NULL,
 EdgeType INT NOT NULL,
