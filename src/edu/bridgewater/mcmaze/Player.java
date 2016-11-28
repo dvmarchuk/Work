@@ -8,27 +8,26 @@ import java.sql.SQLException;
  * @author Alan Bowman, Zach Squires, Charles German
  */
 public class Player {
-	// private String name;
 	private int movesMade; // useful for scoring
 	private Room location;
 
 	/**
 	 * constructor
 	 * 
-	 * @param location
+	 * @param r
 	 *            the starting room for the player
 	 */
-	public Player(Room location) {
-		// this.name = "Ralph";
-		this.location = location;
+	public Player(Room r) {
+		try {
+			setLocation(r.getRoomID());
+		} catch (SQLException e) {
+			System.err.println("=== PROBLEM CREATING PLAYER ===");
+			e.printStackTrace();
+			System.err.println("=== END PLAYER PROBLEM ===");
+		}
 		movesMade = 0;
 	}
 
-	// public Player(String name, Room location) {
-	// this.name = name;
-	// this.location = location;
-	// movesMade = 0;
-	// }
 	/**
 	 * move the player
 	 * 
@@ -58,11 +57,6 @@ public class Player {
 		movesMade++;
 	}
 
-	// Getters
-	// public String getName() {
-	// return name;
-	// }
-
 	public int getMovesMade() {
 		return movesMade;
 	}
@@ -75,7 +69,6 @@ public class Player {
 		return location.getRoomID();
 	}
 
-	// Setters
 	public void setLocation(int ID) throws SQLException {
 		this.location = DBInterface.getRoom(ID);
 		// TODO handle on-entering effects
