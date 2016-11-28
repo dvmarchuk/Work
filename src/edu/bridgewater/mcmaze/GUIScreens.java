@@ -45,7 +45,7 @@ public class GUIScreens extends Application {
 	private ArrayList<Room> roomList = new ArrayList<>();
 	private ArrayList<Edge> edgeList = new ArrayList<>();
 	private TextArea outputText;
-	private Room srcRoom, destRoom;
+	// private Room srcRoom, destRoom;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -517,8 +517,6 @@ public class GUIScreens extends Application {
 		// Actions for buttons on MakerScreen2
 		confirmRoomPositioningButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-				srcRoom = selectRoomChoiceBox.getValue();
-				destRoom = destinationRoomChoiceBox.getValue();
 				selectRoomChoiceBox.setValue(null);
 				destinationRoomChoiceBox.setValue(null);
 			}
@@ -535,16 +533,26 @@ public class GUIScreens extends Application {
 
 		// 0 north 8 up 9 down
 		// set north of also means set south of...
-		northButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 0)));
-		northEastButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 1)));
-		eastButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 2)));
-		southEastButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 3)));
-		southButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 4)));
-		southWestButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 5)));
-		westButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 6)));
-		northWestButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 7)));
-		upButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 8)));
-		downButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 9)));
+		northButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 0)));
+		northEastButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 1)));
+		eastButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 2)));
+		southEastButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 3)));
+		southButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 4)));
+		southWestButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 5)));
+		westButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 6)));
+		northWestButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 7)));
+		upButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 8)));
+		downButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 9)));
 
 		// **********************************************************************************************************************************
 		// MAKER NODE 2
@@ -689,7 +697,7 @@ public class GUIScreens extends Application {
 	 * @param text
 	 *            the text to display in the output area
 	 */
-	public void print(String text) {
+	public static void print(String text) {
 		outputText.appendText(text + '\n');
 	}
 	// TODO make sure that all methods have javadoc comments
