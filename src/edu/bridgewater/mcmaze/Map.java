@@ -89,7 +89,7 @@ public class Map {
 			ps.executeUpdate();
 		}
 
-		System.out.printf("Created map %s with %d lines of SQL\n", mapName, sqlStatements.size());
+		System.out.printf("Created map '%s' with %d lines of SQL\n", mapName, sqlStatements.size());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class Map {
 	public void drop(Connection con) throws SQLException {
 		PreparedStatement ps = con.prepareStatement("DROP DATABASE " + mapName + ";");
 		ps.executeUpdate();
-		System.out.println("Map " + getName() + " dropped.");
+		System.out.println("Map '" + getName() + "' dropped.");
 	}
 
 	/**
