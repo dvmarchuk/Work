@@ -5,15 +5,19 @@ import java.sql.SQLException;
 /**
  * Player Class
  * 
- * @author Alan Bowman, Zach Squires
+ * @author Alan Bowman, Zach Squires, Charles German
  */
-
 public class Player {
 	// private String name;
 	private int movesMade; // useful for scoring
 	private Room location;
 
-	// Constructor for invalid name, part of easter egg?
+	/**
+	 * constructor
+	 * 
+	 * @param location
+	 *            the starting room for the player
+	 */
 	public Player(Room location) {
 		// this.name = "Ralph";
 		this.location = location;
@@ -25,10 +29,29 @@ public class Player {
 	// this.location = location;
 	// movesMade = 0;
 	// }
-
-	public void movePlayer(int direction) throws SQLException {
+	/**
+	 * move the player
+	 * 
+	 * @param direction
+	 *            <ul>
+	 *            <li>0 - north</li>
+	 *            <li>1 - north-east</li>
+	 *            <li>2 - east</li>
+	 *            <li>3 - south-east</li>
+	 *            <li>4 - south</li>
+	 *            <li>5 - south-west</li>
+	 *            <li>6 - west</li>
+	 *            <li>7 - north-west</li>
+	 *            <li>8 - up</li>
+	 *            <li>9 - down</li>
+	 *            </ul>
+	 * @throws SQLException
+	 *             if there is a SQL problem
+	 */
+	public void move(int direction) throws SQLException {
 		if (DBInterface.getAdjacentRoomByEdgeType(getLocationID(), direction) == null) {
 			// print error message and return to direction choosing
+			GUIScreens.print("You cannot go that direction");
 		} else {
 			setLocation(DBInterface.getAdjacentRoomByEdgeType(getLocationID(), direction).getRoomID());
 			// display room name and description
@@ -36,13 +59,13 @@ public class Player {
 			GUIScreens.print(location.getRoomDesc());
 			if (location.isEndingRoom()) {
 				GUIScreens.print("YOU WIN!");
-				// TODO exit
+				GUIScreens.print("Score (lower is better): " + movesMade);
+				setLocation(-1); // so the player can't move around after winning
 			}
 			if (location.hasMcGregor()) {
 				GUIScreens.print("McGregor mode activated- prepare yourself");
-				// TODO switch to the eater egg mode
+				// TODO change this
 			}
-
 		}
 		movesMade++;
 	}

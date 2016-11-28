@@ -11,20 +11,12 @@ import java.util.Random;
  */
 
 public class Enemy {
-	String name;
 	Room location;
 	int previousDir;
 	Random rand;
 	final int CHASE_DISTANCE = 2;
 
 	public Enemy(Room location) {
-		this.name = "clown";
-		this.location = location;
-		rand = new Random();
-	}
-
-	public Enemy(String name, Room location) {
-		this.name = name;
 		this.location = location;
 		rand = new Random();
 	}
@@ -51,6 +43,6 @@ public class Enemy {
 	}
 
 	public void move(int direction) {
-
+		// TODO implement this
 	}
 }

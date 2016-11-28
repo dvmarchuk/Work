@@ -14,37 +14,6 @@ public class Edge {
 	private int edgeType;
 
 	/**
-	 * constructor
-	 * 
-	 * @param firstNode
-	 *            the room id of a room in this edge
-	 * @param secondNode
-	 *            the room id of the other room in this edge. these ids CAN be
-	 *            the same, though this might be confusing
-	 * @param edgeType
-	 *            the relationship between the two rooms
-	 *            <ul>
-	 *            <li>0 - north</li>
-	 *            <li>1 - north-east</li>
-	 *            <li>2 - east</li>
-	 *            <li>3 - south-east</li>
-	 *            <li>4 - south</li>
-	 *            <li>5 - south-west</li>
-	 *            <li>6 - west</li>
-	 *            <li>7 - north-west</li>
-	 *            <li>8 - up</li>
-	 *            <li>9 - down</li>
-	 *            </ul>
-	 */
-	@Deprecated
-	public Edge(int firstNode, int secondNode, int edgeType) {
-		setFirstNode(firstNode);
-		setSecondNode(secondNode);
-		setEdgeType(edgeType);
-		setEdgeID(-1); // TODO change this
-	}
-
-	/**
 	 * constructor (if loading from DB)
 	 * 
 	 * @param firstNode
@@ -146,6 +115,10 @@ public class Edge {
 	 * @return a unique, unused edgeID
 	 */
 	public int generateEdgeID() {
+		// ensure list is not null
+		if (usedIDs == null)
+			usedIDs = new ArrayList<>();
+		// generate unique, unused edgeID
 		int id = 0;
 		do {
 			id++;

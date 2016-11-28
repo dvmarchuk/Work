@@ -26,6 +26,7 @@ public class DBInterface {
 	private static Connection con;
 	// private static Object[][] queryResults;
 	private static Map map;
+	static boolean mapLoaded = false;
 	private static String adminUser, adminPass;
 
 	/**
@@ -90,6 +91,12 @@ public class DBInterface {
 	 *             if there is a problem creating the MySQL database
 	 */
 	public static void loadMap(File f) throws IOException, ClassNotFoundException, SQLException {
+		// unload previous map
+		if (mapLoaded) {
+			map.drop(con);
+			mapLoaded = false;
+		}
+
 		// set up resource readers
 		FileInputStream fileIn = new FileInputStream(f);
 		ObjectInputStream objectIn = new ObjectInputStream(fileIn);
@@ -111,6 +118,7 @@ public class DBInterface {
 
 		map = m;
 		map.create(con);
+		mapLoaded = true;
 	}
 
 	/**

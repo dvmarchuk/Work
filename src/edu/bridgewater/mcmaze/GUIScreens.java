@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.sun.corba.se.spi.orbutil.fsm.Action;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -30,7 +30,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -52,7 +51,10 @@ public class GUIScreens extends Application {
 	private int rooms = 0;
 	private ArrayList<Room> roomList = new ArrayList<>();
 	private ArrayList<Edge> edgeList = new ArrayList<>();
-	private static TextArea outputText;
+	private static TextArea outputText, outputRooms;
+	private static String outputRoomInfo;
+	private static boolean edgeConfirmed = true;
+	static Player p; // TODO implement player stuff
 	// private Room srcRoom, destRoom;
 
 	public static void main(String[] args) {
@@ -91,11 +93,14 @@ public class GUIScreens extends Application {
 		BorderPane playNode = new BorderPane();
 		playNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode = new BorderPane();
-		makerNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode
+				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode2 = new BorderPane();
-		makerNode2.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode2
+				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode3 = new BorderPane();
-		makerNode3.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode3
+				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
 		// Scenes
 		Scene mainScene = new Scene(rootNode, 1300, 900);
@@ -590,6 +595,14 @@ public class GUIScreens extends Application {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
 				myStage.setTitle("The McMaze");
+				// TODO here's the play button
+				try {
+					p = new Player(DBInterface.getStartingRoom());
+				} catch (SQLException e) {
+					System.err.println("=== PROBLEM CREATING PLAYER ===");
+					e.printStackTrace();
+					System.err.println("=== END PLAYER PROBLEM ===");
+				}
 			}
 		});
 
@@ -681,18 +694,20 @@ public class GUIScreens extends Application {
 		VBox inputOutputVBox = new VBox(20);
 		inputOutputVBox.getChildren().addAll(outputText, userInput);
 
-	// CSS for playNode
+		// CSS for playNode
 		Platform.runLater(new Runnable() {
-	// Sets the player's cursor automatically on the TextField
-            @Override
-            public void run() {
-                userInput.requestFocus();
-            }
-        });
-		userInput.setStyle("-fx-padding: 10; -fx-font: 20 arial;-fx-background-color: transparent, black, transparent, beige;");
+			// Sets the player's cursor automatically on the TextField
+			@Override
+			public void run() {
+				userInput.requestFocus();
+			}
+		});
+		userInput.setStyle(
+				"-fx-padding: 10; -fx-font: 20 arial;-fx-background-color: transparent, black, transparent, beige;");
 		userInput.setPadding(new Insets(0, 0, 0, 25));
 		userInput.setPrefWidth(700);
-		outputText.setStyle("-fx-padding: 5; -fx-font: 22 arial;-fx-background-color: transparent, gray, transparent, grey;");
+		outputText.setStyle(
+				"-fx-padding: 5; -fx-font: 22 arial;-fx-background-color: transparent, gray, transparent, grey;");
 		outputText.setPrefRowCount(30);
 		outputText.setEditable(false);
 		outputText.setWrapText(true);
@@ -727,174 +742,173 @@ public class GUIScreens extends Application {
 		helpButtonVBox.setAlignment(Pos.CENTER);
 		upDownLabeledVBox.setAlignment(Pos.CENTER);
 
-
 		// Actions for Buttons on PlayNode
-				helpButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						print("Press a directional button to travel in that direction or type in \"move\" followed by the direction you want to travel. "
-								+ "Try to make it to the exit before McGregor catches you! WARNING: He's not a vegetarian.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		helpButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				print("Press a directional button to travel in that direction or type in \"move\" followed by the direction you want to travel. "
+						+ "Try to make it to the exit before McGregor catches you! WARNING: He's not a vegetarian.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
-				northButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(0);
-						print("You attempt to travel north.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+			}
+		});
+		northButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(0);
+				// print("You attempt to travel north.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				northEastButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(1);
-						print("You attempt to travel north-east.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		northEastButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(1);
+				// print("You attempt to travel north-east.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				eastButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(2);
-						print("You attempt to travel east.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		eastButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(2);
+				// print("You attempt to travel east.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				southEastButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(3);
-						print("You attempt to travel south-east.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		southEastButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(3);
+				// print("You attempt to travel south-east.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				southButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(4);
-						print("You attempt to travel south.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		southButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(4);
+				// print("You attempt to travel south.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				southWestButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(5);
-						print("You attempt to travel south-west.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		southWestButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(5);
+				// print("You attempt to travel south-west.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				westButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(6);
-						print("You attempt to travel west.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		westButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(6);
+				// print("You attempt to travel west.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				northWestButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(7);
-						print("You attempt to travel north-west.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		northWestButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(7);
+				// print("You attempt to travel north-west.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				upButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(8);
-						print("You attempt to travel up.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		upButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(8);
+				// print("You attempt to travel up.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				downButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						movePlayer(9);
-						print("You attempt to travel down.");
-						Platform.runLater(new Runnable() {
-							// Sets the player's cursor automatically on the TextField
-						            @Override
-						            public void run() {
-						                userInput.requestFocus();
-						            }
-						        });
+		downButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				movePlayer(9);
+				// print("You attempt to travel down.");
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
-				userInput.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-							print(userInput.getText());
-							userInput.clear();
-							Platform.runLater(new Runnable() {
-								// Sets the player's cursor automatically on the TextField
-							            @Override
-							            public void run() {
-							                userInput.requestFocus();
-							            }
-							        });
+		userInput.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				print(userInput.getText());
+				userInput.clear();
+				Platform.runLater(new Runnable() {
+					// Sets the player's cursor automatically on the TextField
+					@Override
+					public void run() {
+						userInput.requestFocus();
 					}
 				});
+			}
+		});
 
 		// **********************************************************************************************************************************
 		// PLAY NODE
@@ -931,16 +945,17 @@ public class GUIScreens extends Application {
 		ChoiceBox<Room> cbSecondRoom = new ChoiceBox<>();
 		ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
 		ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
-		// TODO make this code integrate nicely
 
 		// CSS for makerNode1
 		nameOfRoom.setStyle("-fx-font: 45 arial;");
-		roomName.setStyle("-fx-padding: 20; -fx-font: 30 arial; -fx-background-color: transparent, black, transparent, beige;");
+		roomName.setStyle(
+				"-fx-padding: 20; -fx-font: 30 arial; -fx-background-color: transparent, black, transparent, beige;");
 		roomName.setPrefWidth(550);
 		BorderPane.setAlignment(nameHBox, Pos.CENTER);
 		descOfRoom.setStyle("-fx-font: 30 arial;");
 		descOfRoom.setPadding(new Insets(0, 0, 0, 20));
-		roomDesc.setStyle("-fx-padding: 20; -fx-font: 20 arial; -fx-background-color: transparent, black, transparent, gray; text-area-background: beige; ");
+		roomDesc.setStyle(
+				"-fx-padding: 20; -fx-font: 20 arial; -fx-background-color: transparent, black, transparent, gray; text-area-background: beige; ");
 		roomDesc.setPrefRowCount(20);
 		addRoomButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 		submitButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
@@ -995,7 +1010,6 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		// TODO integrate dennis's code better
 		ToggleButton northWestButton2 = new ToggleButton("North-West");
 		ToggleButton northButton2 = new ToggleButton("North");
 		ToggleButton northEastButton2 = new ToggleButton("North-East");
@@ -1008,7 +1022,7 @@ public class GUIScreens extends Application {
 		ToggleButton downButton2 = new ToggleButton("Below");
 		Button confirmRoomPositioningButton = new Button("Confirm this room position");
 		Button nextNodeButton = new Button("Continue to next screen");
-		TextArea outputRooms = new TextArea();
+		outputRooms = new TextArea();
 		ToggleGroup toggleGroup = new ToggleGroup();
 		northWestButton2.setToggleGroup(toggleGroup);
 		northButton2.setToggleGroup(toggleGroup);
@@ -1037,7 +1051,7 @@ public class GUIScreens extends Application {
 		finalVBox.getChildren().addAll(selectRoomLabel, selectRoomChoiceBox, fillerText1, allUpDownHBox, fillerText2,
 				destinationRoomChoiceBox, confirmRoomPositioningButton, nextNodeButton);
 
-		//CSS for makerNode2
+		// CSS for makerNode2
 		selectRoomLabel.setStyle("-fx-font: 45 arial;");
 		fillerText1.setStyle("-fx-font: 35 arial;");
 		fillerText2.setStyle("-fx-font: 35 arial;");
@@ -1073,7 +1087,8 @@ public class GUIScreens extends Application {
 		westButton2.setMinSize(100, 50);
 		upButton2.setMinSize(100, 50);
 		downButton2.setMinSize(100, 50);
-		outputRooms.setStyle("-fx-padding: 5; -fx-font: 22 arial; -fx-background-color: transparent, gray, transparent, gray;");
+		outputRooms.setStyle(
+				"-fx-padding: 5; -fx-font: 22 arial; -fx-background-color: transparent, gray, transparent, gray;");
 		outputRooms.setEditable(false);
 		outputRooms.setWrapText(true);
 		outputRooms.setPrefSize(500, 500);
@@ -1083,6 +1098,7 @@ public class GUIScreens extends Application {
 			public void handle(ActionEvent ae) {
 				selectRoomChoiceBox.setValue(null);
 				destinationRoomChoiceBox.setValue(null);
+				confirmOutputRoomInfo();
 			}
 		});
 		// TODO setHasMcGregor(true) somewhere
@@ -1097,26 +1113,26 @@ public class GUIScreens extends Application {
 
 		// 0 north 8 up 9 down
 		// set north of also means set south of...
-		northButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 0)));
-		northEastButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 1)));
-		eastButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 2)));
-		southEastButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 3)));
-		southButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 4)));
-		southWestButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 5)));
-		westButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 6)));
-		northWestButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 7)));
-		upButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 8)));
-		downButton2.setOnAction(eventHandler -> edgeList
-				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 9)));
+		northButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 0)));
+		northEastButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 1)));
+		eastButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 2)));
+		southEastButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 3)));
+		southButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 4)));
+		southWestButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 5)));
+		westButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 6)));
+		northWestButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 7)));
+		upButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 8)));
+		downButton2.setOnAction(eventHandler -> updateEdgeList(
+				new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 9)));
 
 		// **********************************************************************************************************************************
 		// MAKER NODE 2
@@ -1127,12 +1143,11 @@ public class GUIScreens extends Application {
 		// Initializing everything for MakerNode3
 		Label whichRoomLabel = new Label("Which Room is...");
 		Label theFirstRoomLabel = new Label("the First Room:");
-		// TODO integrate dennis's code better
 		HBox firstRoomHBox = new HBox(30);
 		firstRoomHBox.getChildren().addAll(theFirstRoomLabel, cbFirstRoom);
 		CheckBox checkBox = new CheckBox("Enable Easter Egg Room");
 		checkBox.setIndeterminate(false);
-		Label theBonusRoomLabel = new Label("the Bonus Room:");
+		Label theBonusRoomLabel = new Label("The Bonus Room:");
 		HBox bonusRoomHBox = new HBox(30);
 		bonusRoomHBox.getChildren().addAll(theBonusRoomLabel, cbBonusRoom);
 		Label theFinalRoomLabel = new Label("the Final Room:");
@@ -1207,11 +1222,10 @@ public class GUIScreens extends Application {
 
 		checkBox.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-				if(checkBox.isSelected()){
+				if (checkBox.isSelected()) {
 					theBonusRoomLabel.setTextFill(Color.BLACK);
 					cbBonusRoom.setDisable(false);
-				}
-				else{
+				} else {
 					theBonusRoomLabel.setTextFill(Color.GRAY);
 					cbBonusRoom.setDisable(true);
 				}
@@ -1258,10 +1272,96 @@ public class GUIScreens extends Application {
 	 *            </ul>
 	 */
 	private void movePlayer(int direction) {
-		// playerObject.movePlayer(direction);
-		// TODO implement player moving logic
+		try {
+			p.move(direction);
+		} catch (SQLException e) {
+			System.err.println("=== PROBLEM MOVING PLAYER ===");
+			e.printStackTrace();
+			System.err.println("=== END MOVING PROBLEM ===");
+		}
 	}
 
+	/**
+	 * @param e
+	 *            the edge to add/modify
+	 */
+	private void updateEdgeList(Edge e) {
+		if (edgeConfirmed) {
+			edgeList.add(e);
+			genOutputRoomInfo(e);
+		} else {
+			edgeList.remove(edgeList.size() - 1); // remove old edge
+			edgeList.add(e); // add edge (modified)
+			genOutputRoomInfo(e);
+		}
+	}
+
+	/**
+	 * generate and temporarily store output room info
+	 * 
+	 * @param e
+	 *            the edge to store info for
+	 */
+	private void genOutputRoomInfo(Edge e) {
+		Room firstNode = getRoom(e.getFirstNode());
+		Room secondNode = getRoom(e.getSecondNode());
+		outputRoomInfo = e.getEdgeID() + " : " + translateEdgeType(e.getEdgeType()) + " : " + firstNode.getRoomName()
+				+ " : " + secondNode.getRoomName();
+	}
+
+	/**
+	 * @param type
+	 *            integer representation of direction
+	 * @return corresponding string representation of direction
+	 */
+	private String translateEdgeType(int type) {
+		String result = "";
+		switch (type) {
+		case 0:
+			result = "north";
+			break;
+		case 1:
+			result = "north-east";
+			break;
+		case 2:
+			result = "east";
+			break;
+		case 3:
+			result = "south-east";
+			break;
+		case 4:
+			result = "south";
+			break;
+		case 5:
+			result = "south-west";
+			break;
+		case 6:
+			result = "west";
+			break;
+		case 7:
+			result = "north-west";
+			break;
+		case 8:
+			result = "up";
+			break;
+		case 9:
+			result = "down";
+			break;
+		}
+		return result;
+	}
+
+	/**
+	 * commit the temporarily stored info to outputRooms
+	 */
+	private void confirmOutputRoomInfo() {
+		outputRooms.appendText(outputRoomInfo);
+	}
+
+	/**
+	 * @param mapName
+	 *            the name of the map to save
+	 */
 	private void saveMap(String mapName) {
 		try {
 			DBInterface.writeMapFile(roomList.toArray(new Room[roomList.size()]),
@@ -1283,4 +1383,19 @@ public class GUIScreens extends Application {
 		outputText.appendText(text + '\n');
 	}
 	// TODO make sure that all methods have javadoc comments
+
+	/**
+	 * get room (this is ONLY for the map-maker, which is not connected to the
+	 * database)
+	 * 
+	 * @param roomID
+	 *            the room id to find
+	 * @return the {@code Room} object, or {@code null}
+	 */
+	private Room getRoom(int roomID) {
+		for (Room r : roomList)
+			if (r.getRoomID() == roomID)
+				return r;
+		return null;
+	}
 }
