@@ -162,10 +162,8 @@ public class Edge {
 	 * @return the SQL instruction required to create this Edge
 	 */
 	public String toSQL(String mapName) {
-		String thisEdge = String.format(
-				"INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType) VALUES (%d, %d, %d, %d);", mapName,
-				getEdgeID(), getFirstNode(), getSecondNode(), getEdgeType());
-		return thisEdge + getOppositeEdge(mapName);
+		return String.format("INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType) VALUES (%d, %d, %d, %d);",
+				mapName, getEdgeID(), getFirstNode(), getSecondNode(), getEdgeType());
 	}
 
 	/**
@@ -175,7 +173,7 @@ public class Edge {
 	 *            the name of the database the edge table is in
 	 * @return the SQL instruction required to create the Edge opposite this one
 	 */
-	private String getOppositeEdge(String mapName) {
+	public String getOppositeEdge(String mapName) {
 		int firstNode = this.secondNode;
 		int secondNode = this.firstNode;
 		int edgeID = generateEdgeID();
@@ -186,8 +184,7 @@ public class Edge {
 			edgeType = this.edgeType - 4;
 		else
 			edgeType = this.edgeType == 8 ? 9 : 8;
-		return String.format("INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType) VALUES (%d, %d, %d, %d);",
-				mapName, edgeID, firstNode, secondNode, edgeType);
+		return new Edge(firstNode, secondNode, edgeType, edgeID).toSQL(mapName);
 	}
 
 	/*

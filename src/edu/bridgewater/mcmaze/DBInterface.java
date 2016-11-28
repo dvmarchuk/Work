@@ -385,8 +385,10 @@ public class DBInterface {
 		for (Room r : rooms)
 			sqlStatements.add(r.toSQL(mapName));
 		// statement to create edges
-		for (Edge e : edges)
+		for (Edge e : edges){
 			sqlStatements.add(e.toSQL(mapName));
+			sqlStatements.add(e.getOppositeEdge(mapName));
+		}
 
 		// file header information
 		out.writeObject("unused"); // relative bg image path

@@ -1311,6 +1311,12 @@ public class GUIScreens extends Application {
 	 *            the edge to add/modify
 	 */
 	private void updateEdgeList(Edge e) {
+		// this is just a hack since there were weird design conflicts
+		int realFirstNode = e.getSecondNode();
+		int realSecondNode = e.getFirstNode();
+		e.setFirstNode(realFirstNode);
+		e.setSecondNode(realSecondNode);
+		// actually update the edge list
 		if (edgeConfirmed) {
 			edgeList.add(e);
 			genOutputRoomInfo(e);

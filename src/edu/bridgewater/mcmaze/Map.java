@@ -83,6 +83,7 @@ public class Map {
 	public void create(Connection con) throws SQLException {
 		// execute each line of SQL code from the file to create the database
 		for (String s : sqlStatements) {
+			System.out.println(s);
 			PreparedStatement ps = con.prepareStatement(s);
 			ps.executeUpdate();
 		}
