@@ -405,5 +405,6 @@ public class DBInterface {
 
 		// close resources
 		out.close();
+		System.out.println("Wrote file '" + f.toString() + "'");
 	}
 }
