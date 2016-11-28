@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class Player {
 	private int movesMade; // useful for scoring
 	private Room location;
+	private Enemy mcgregor;
 
 	/**
 	 * constructor
@@ -20,6 +21,10 @@ public class Player {
 	public Player(Room r) {
 		try {
 			setLocation(r.getRoomID());
+			if (DBInterface.getEasterEggRoom() == null)
+				mcgregor = null;
+			else
+				mcgregor = new Enemy();
 		} catch (SQLException e) {
 			System.err.println("=== PROBLEM CREATING PLAYER ===");
 			e.printStackTrace();
@@ -77,7 +82,7 @@ public class Player {
 		return location.getRoomID();
 	}
 
-	public void setLocation(int ID) throws SQLException {
+	private void setLocation(int ID) throws SQLException {
 		this.location = DBInterface.getRoom(ID);
 		// TODO handle on-entering effects
 		// display room name and description
@@ -85,13 +90,31 @@ public class Player {
 		GUIScreens.print(location.getRoomDesc());
 		if (location.isEndingRoom()) {
 			GUIScreens.print("YOU WIN!");
-			GUIScreens.print("Score (lower is better): " + movesMade);
+			GUIScreens.print("Score (lower is better): " + calculateScore());
 			// prevent player from moving after winning
 			this.location = null;
 		}
 		if (location.hasMcGregor()) {
-			GUIScreens.print("McGregor mode activated - prepare yourself");
+			mcgregor.setPlayerSpotted(true);
+			GUIScreens.print("McGregor has spotted you. It won't be long before he catches you...");
 			// TODO start enemy chase
+		}
+		if (mcgregor != null) {
+			mcgregor.incrementMoves();
+			GUIScreens.print("You can hear McGregor creeping closer...");
+			if (mcgregor.hasCaughtPlayer(location.getRoomID())) {
+				GUIScreens.print("McGregor has caught you! YOU LOSE!");
+				// prevent player from moving after losing
+				this.location = null;
+			}
+		}
+	}
+
+	private int calculateScore() {
+		if (mcgregor == null)
+			return movesMade;
+		else {
+			return movesMade - mcgregor.getMovesMade();
 		}
 	}
 }
