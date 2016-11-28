@@ -167,24 +167,56 @@ public class Edge {
 	}
 
 	/**
-	 * get the correspondingly opposite edge to this one
+	 * get the correspondingly opposite edge to this one. also, PARKOUR!
 	 * 
 	 * @param mapName
 	 *            the name of the database the edge table is in
 	 * @return the SQL instruction required to create the Edge opposite this one
 	 */
-	public String getOppositeEdge(String mapName) {
+	public String getMirrorsEdge(String mapName) {
 		int firstNode = this.secondNode;
 		int secondNode = this.firstNode;
 		int edgeID = generateEdgeID();
-		int edgeType;
-		if (this.edgeType >= 0 && this.edgeType < 5)
-			edgeType = this.edgeType + 4;
-		else if (this.edgeType >= 5 && this.edgeType < 8)
-			edgeType = this.edgeType - 4;
-		else
-			edgeType = this.edgeType == 8 ? 9 : 8;
+		int edgeType = getOppositeEdge(this.edgeType);
 		return new Edge(firstNode, secondNode, edgeType, edgeID).toSQL(mapName);
+	}
+
+	private int getOppositeEdge(int edgeType) {
+		int i;
+		switch (edgeType) {
+		default:
+		case 0:
+			i = 4;
+			break;
+		case 1:
+			i = 5;
+			break;
+		case 2:
+			i = 6;
+			break;
+		case 3:
+			i = 7;
+			break;
+		case 4:
+			i = 0;
+			break;
+		case 5:
+			i = 1;
+			break;
+		case 6:
+			i = 2;
+			break;
+		case 7:
+			i = 3;
+			break;
+		case 8:
+			i = 9;
+			break;
+		case 9:
+			i = 8;
+			break;
+		}
+		return i;
 	}
 
 	/*

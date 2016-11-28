@@ -1,5 +1,7 @@
 package edu.bridgewater.mcmaze;
 
+import java.util.Random;
+
 /**
  * A class for the AI enemy present in the game's maze. The Enemy will randomly
  * search the maze until he is within a certain distance of the player at which
@@ -14,8 +16,10 @@ public class Enemy {
 	private int movesMade;
 
 	public Enemy() {
-		// range 1-4 (1-3??)
-		movesUntilCapture = (int) (Math.random() * 3 + 1);
+		Random r = new Random();
+		int upperBound = 7;
+		int lowerBound = 3;
+		movesUntilCapture = r.nextInt(upperBound - lowerBound + 1) + lowerBound;
 		playerSeen = false;
 	}
 

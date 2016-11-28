@@ -21,16 +21,20 @@ public class Player {
 	public Player(Room r) {
 		try {
 			setLocation(r.getRoomID());
-			if (DBInterface.getEasterEggRoom() == null)
-				mcgregor = null;
-			else
-				mcgregor = new Enemy();
+			setupEnemy();
 		} catch (SQLException e) {
 			System.err.println("=== PROBLEM CREATING PLAYER ===");
 			e.printStackTrace();
 			System.err.println("=== END PLAYER PROBLEM ===");
 		}
 		movesMade = 0;
+	}
+
+	private void setupEnemy() throws SQLException {
+		if (DBInterface.getEasterEggRoom() == null)
+			mcgregor = null;
+		else
+			mcgregor = new Enemy();
 	}
 
 	/**

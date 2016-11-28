@@ -596,6 +596,7 @@ public class GUIScreens extends Application {
 				myStage.setScene(playScene);
 				myStage.setTitle("The McMaze");
 				// TODO here's the play button
+				outputText.setText("");
 				try {
 					p = new Player(DBInterface.getStartingRoom());
 				} catch (SQLException e) {
@@ -1316,7 +1317,8 @@ public class GUIScreens extends Application {
 //		int realSecondNode = e.getFirstNode();
 //		e.setFirstNode(realFirstNode);
 //		e.setSecondNode(realSecondNode);
-//		// actually update the edge list
+		
+		// actually update the edge list
 		if (edgeConfirmed) {
 			edgeList.add(e);
 			genOutputRoomInfo(e);

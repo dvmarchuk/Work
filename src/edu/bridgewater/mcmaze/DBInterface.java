@@ -283,9 +283,9 @@ public class DBInterface {
 		for (Edge e : edges)
 			exits.add(e.getEdgeType());
 		// convert to array
-//		int[] result = new int[exits.size()];
-//		for (int i = 0; i < result.length; i++)
-//			result[i] = exits.get(i);
+		// int[] result = new int[exits.size()];
+		// for (int i = 0; i < result.length; i++)
+		// result[i] = exits.get(i);
 		return exits;
 	}
 
@@ -307,7 +307,7 @@ public class DBInterface {
 	}
 
 	/**
-	 * @return the easter egg room
+	 * @return the easter egg room or {@code null} if there is no such room
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
@@ -318,9 +318,10 @@ public class DBInterface {
 						+ map.getName() + ".Rooms WHERE HasMcGregor='1';");
 		ResultSet rs = ps.executeQuery();
 		// get the easter egg room
-		rs.next();
-		return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
-				rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+		if (rs.next())
+			return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
+					rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+		return null;
 	}
 
 	/**
@@ -385,9 +386,9 @@ public class DBInterface {
 		for (Room r : rooms)
 			sqlStatements.add(r.toSQL(mapName));
 		// statement to create edges
-		for (Edge e : edges){
+		for (Edge e : edges) {
 			sqlStatements.add(e.toSQL(mapName));
-			sqlStatements.add(e.getOppositeEdge(mapName));
+			sqlStatements.add(e.getMirrorsEdge(mapName));
 		}
 
 		// file header information
