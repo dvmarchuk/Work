@@ -1,10 +1,10 @@
 package edu.bridgewater.mcmaze;
 
-import java.awt.Choice;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
 import com.sun.corba.se.spi.orbutil.fsm.Action;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -37,6 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -51,13 +52,35 @@ public class GUIScreens extends Application {
 	private int rooms = 0;
 	private ArrayList<Room> roomList = new ArrayList<>();
 	private ArrayList<Edge> edgeList = new ArrayList<>();
-	private TextArea outputText;
-	private Room srcRoom, destRoom;
+	private static TextArea outputText;
+	// private Room srcRoom, destRoom;
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see javafx.application.Application#stop()
+	 */
+	@Override
+	public void stop() {
+		try {
+			DBInterface.terminateConnection();
+		} catch (SQLException e) {
+			System.err.println("=== PROBLEM TERMINATING CONNECTION ===");
+			e.printStackTrace();
+			System.err.println("=== END TERMINATION ERROR ===");
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
+	@Override
 	public void start(Stage myStage) throws Exception {
 		myStage.setTitle("The McMaze - Title Screen");
 		myStage.setResizable(false);
@@ -81,12 +104,6 @@ public class GUIScreens extends Application {
 		Scene makerScene2 = new Scene(makerNode2, 1300, 900);
 		Scene makerScene3 = new Scene(makerNode3, 1300, 900);
 		myStage.setScene(mainScene);
-
-		// Setting constraints for playNode's GridPane
-		GridPane.setColumnIndex(playNode, 0);
-		GridPane.setRowIndex(playNode, 0);
-		GridPane.setColumnSpan(playNode, 13);
-		GridPane.setRowSpan(playNode, 9);
 
 		// **********************************************************************************************************************************
 		// MENU BAR
@@ -230,7 +247,15 @@ public class GUIScreens extends Application {
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-					//Code for submitting credentials to mySQL Server*****************************************
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
+						credPopup.close();
 						credPopup.close();
 					}
 				});
@@ -276,7 +301,14 @@ public class GUIScreens extends Application {
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-					//Code for submitting credentials to mySQL Server*****************************************
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
 						credPopup.close();
 					}
 				});
@@ -322,7 +354,14 @@ public class GUIScreens extends Application {
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-					//Code for submitting credentials to mySQL Server*****************************************
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
 						credPopup.close();
 					}
 				});
@@ -368,7 +407,14 @@ public class GUIScreens extends Application {
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-					//Code for submitting credentials to mySQL Server*****************************************
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
 						credPopup.close();
 					}
 				});
@@ -414,7 +460,14 @@ public class GUIScreens extends Application {
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-					//Code for submitting credentials to mySQL Server*****************************************
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
 						credPopup.close();
 					}
 				});
@@ -426,32 +479,77 @@ public class GUIScreens extends Application {
 		});
 
 		loadMap.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//Needs Code to load map ********************************
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
 			}
 		});
 
 		loadMap2.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//Needs Code to load map******************************
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
 			}
 		});
 
 		loadMap3.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//Needs Code to load map**********************************
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
 			}
 		});
 
 		loadMap4.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//Needs Code to load map*************************************
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
 			}
 		});
 
 		loadMap5.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent ae) {
-				//Needs Code to load map*********************************
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
 			}
 		});
 
@@ -468,7 +566,7 @@ public class GUIScreens extends Application {
 		Button quitButton = new Button("Quit");
 		DropShadow dropShadow = new DropShadow();
 
-	//CSS for rootNode
+		// CSS for rootNode
 		titleLabel.setStyle("-fx-font-size: 90 arial;");
 		playButton.setStyle("-fx-padding: 20; -fx-font: 60 arial;");
 		makerButton.setStyle("-fx-padding: 20; -fx-font: 60 arial;");
@@ -525,9 +623,9 @@ public class GUIScreens extends Application {
 				vbox.getChildren().addAll(exitLabel, hbox);
 				vbox.setPadding(new Insets(30, 30, 30, 30));
 
-				exit.setOnAction(eh -> System.exit(0));
+				exit.setOnAction(eventHandler -> System.exit(0));
 
-				cancel.setOnAction(eh -> exitPopup.close());
+				cancel.setOnAction(eventHandler -> exitPopup.close());
 
 				Scene exitScene = new Scene(vbox);
 				exitPopup.setScene(exitScene);
@@ -877,19 +975,7 @@ public class GUIScreens extends Application {
 				String rmDescription = roomDesc.getText();
 				roomDesc.setText("");
 				roomName.setText("");
-				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms)); // (String
-																							// roomName,
-																							// String
-																							// roomDesc,
-																							// boolean
-																							// isStartingRoom,
-																							// boolean
-																							// isEndingRoom,
-																							// boolean
-																							// hasMcGregor,
-																							// final
-																							// int
-																							// roomID)
+				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
 				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
 				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
 				cbFirstRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
@@ -995,8 +1081,6 @@ public class GUIScreens extends Application {
 		// Actions for buttons on MakerScreen2
 		confirmRoomPositioningButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-				srcRoom = selectRoomChoiceBox.getValue();
-				destRoom = destinationRoomChoiceBox.getValue();
 				selectRoomChoiceBox.setValue(null);
 				destinationRoomChoiceBox.setValue(null);
 			}
@@ -1013,16 +1097,26 @@ public class GUIScreens extends Application {
 
 		// 0 north 8 up 9 down
 		// set north of also means set south of...
-		northButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 0)));
-		northEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 1)));
-		eastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 2)));
-		southEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 3)));
-		southButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 4)));
-		southWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 5)));
-		westButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 6)));
-		northWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 7)));
-		upButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 8)));
-		downButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 9)));
+		northButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 0)));
+		northEastButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 1)));
+		eastButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 2)));
+		southEastButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 3)));
+		southButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 4)));
+		southWestButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 5)));
+		westButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 6)));
+		northWestButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 7)));
+		upButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 8)));
+		downButton2.setOnAction(eventHandler -> edgeList
+				.add(new Edge(selectRoomChoiceBox.getValue(), destinationRoomChoiceBox.getValue(), 9)));
 
 		// **********************************************************************************************************************************
 		// MAKER NODE 2
@@ -1051,7 +1145,7 @@ public class GUIScreens extends Application {
 		almostAllChoicesVBox2.getChildren().addAll(whichRoomLabel, almostAllChoicesVBox);
 		VBox allMakerNode3ChoicesVBox = new VBox(100);
 		allMakerNode3ChoicesVBox.getChildren().addAll(almostAllChoicesVBox2, confirmFinishedMapButton);
-		
+
 		// CSS for MakerNode3
 		firstRoomHBox.setAlignment(Pos.CENTER);
 		bonusRoomHBox.setAlignment(Pos.CENTER);
@@ -1102,7 +1196,7 @@ public class GUIScreens extends Application {
 
 				saveAndFinishButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-						saveMap();
+						saveMap(newNameTextField.getText());
 						nameNewMaze.close();
 						myStage.setScene(mainScene);
 						myStage.setTitle("The McMaze - Title Screen");
@@ -1123,7 +1217,7 @@ public class GUIScreens extends Application {
 				}
 			}
 		});
-		
+
 		// **********************************************************************************************************************************
 		// MAKER NODE 3
 
@@ -1145,20 +1239,47 @@ public class GUIScreens extends Application {
 
 	// **********************************************************************************************************************************
 	// METHODS
-	// Moves the player based on an int direction
-	// 0 North 1 Northeast 2 East etc...
+
+	/**
+	 * move the player
+	 *
+	 * @param direction
+	 *            <ul>
+	 *            <li>0 - north</li>
+	 *            <li>1 - north-east</li>
+	 *            <li>2 - east</li>
+	 *            <li>3 - south-east</li>
+	 *            <li>4 - south</li>
+	 *            <li>5 - south-west</li>
+	 *            <li>6 - west</li>
+	 *            <li>7 - north-west</li>
+	 *            <li>8 - up</li>
+	 *            <li>9 - down</li>
+	 *            </ul>
+	 */
 	private void movePlayer(int direction) {
 		// playerObject.movePlayer(direction);
 		// TODO implement player moving logic
 	}
-	private void saveMap(){
-		// TODO write to file
-		// send room/edge arrays somewhere
-		// make map object
-		// map.save()
+
+	private void saveMap(String mapName) {
+		try {
+			DBInterface.writeMapFile(roomList.toArray(new Room[roomList.size()]),
+					edgeList.toArray(new Edge[edgeList.size()]), new File(mapName + ".mcmaze"), mapName);
+		} catch (IOException e) {
+			System.err.println("=== PROBLEM WRITING MAP FILE ===");
+			e.printStackTrace();
+			System.err.println("=== END MAP FILE PROBLEM ===");
+		}
 	}
 
-	public void print(String text) {
+	/**
+	 * display text in GUI output area
+	 *
+	 * @param text
+	 *            the text to display in the output area
+	 */
+	public static void print(String text) {
 		outputText.appendText(text + '\n');
 	}
 	// TODO make sure that all methods have javadoc comments

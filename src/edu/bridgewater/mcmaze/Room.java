@@ -126,7 +126,7 @@ public class Room {
 	/**
 	 * @return the hasMcGregor
 	 */
-	public boolean isHasMcGregor() {
+	public boolean hasMcGregor() {
 		return hasMcGregor;
 	}
 
@@ -168,6 +168,19 @@ public class Room {
 			id++;
 		} while (usedIDs.contains(id));
 		return id;
+	}
+
+	/**
+	 * @param mapName
+	 *            the name of the database the room table is in
+	 * @return the SQL instruction required to create this Room
+	 */
+	public String toSQL(String mapName) {
+		return String.format(
+				"INSERT INTO %s.Rooms (RoomID, RoomName, RoomDesc, HasMcGregor, IsEndingRoom, IsStartingRoom)"
+						+ " VALUES (%d, '%s', '%s', %d, %d, %d);",
+				mapName, getRoomID(), getRoomName(), getRoomDesc(), hasMcGregor() ? 1 : 0, isEndingRoom() ? 1 : 0,
+				isStartingRoom() ? 1 : 0);
 	}
 
 	/*
