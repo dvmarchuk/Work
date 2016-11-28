@@ -1211,7 +1211,20 @@ public class GUIScreens extends Application {
 
 				saveAndFinishButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
+						// get starting room
+						Room start = cbFirstRoom.getValue();
+						start.setStartingRoom(true);
+						// get ending room
+						Room end = cbFinalRoom.getValue();
+						end.setEndingRoom(true);
+						// get bonus room
+						Room bonus = cbBonusRoom.getValue();
+						if (bonus != null)
+							bonus.setHasMcGregor(true);
+						// save map
 						saveMap(newNameTextField.getText());
+
+						// gui stuff
 						nameNewMaze.close();
 						myStage.setScene(mainScene);
 						myStage.setTitle("The McMaze - Title Screen");
@@ -1355,7 +1368,7 @@ public class GUIScreens extends Application {
 	 * commit the temporarily stored info to outputRooms
 	 */
 	private void confirmOutputRoomInfo() {
-		outputRooms.appendText(outputRoomInfo);
+		outputRooms.appendText(outputRoomInfo + '\n');
 	}
 
 	/**

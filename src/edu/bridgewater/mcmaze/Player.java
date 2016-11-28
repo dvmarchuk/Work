@@ -54,18 +54,6 @@ public class Player {
 			GUIScreens.print("You cannot go that direction");
 		} else {
 			setLocation(DBInterface.getAdjacentRoomByEdgeType(getLocationID(), direction).getRoomID());
-			// display room name and description
-			GUIScreens.print(location.getRoomName());
-			GUIScreens.print(location.getRoomDesc());
-			if (location.isEndingRoom()) {
-				GUIScreens.print("YOU WIN!");
-				GUIScreens.print("Score (lower is better): " + movesMade);
-				setLocation(-1); // so the player can't move around after winning
-			}
-			if (location.hasMcGregor()) {
-				GUIScreens.print("McGregor mode activated- prepare yourself");
-				// TODO change this
-			}
 		}
 		movesMade++;
 	}
@@ -90,6 +78,19 @@ public class Player {
 	// Setters
 	public void setLocation(int ID) throws SQLException {
 		this.location = DBInterface.getRoom(ID);
-
+		// TODO handle on-entering effects
+		// display room name and description
+		GUIScreens.print(location.getRoomName());
+		GUIScreens.print(location.getRoomDesc());
+		if (location.isEndingRoom()) {
+			GUIScreens.print("YOU WIN!");
+			GUIScreens.print("Score (lower is better): " + movesMade);
+			// prevent player from moving after winning
+			this.location = null;
+		}
+		if (location.hasMcGregor()) {
+			GUIScreens.print("McGregor mode activated - prepare yourself");
+			// TODO start enemy chase
+		}
 	}
 }
