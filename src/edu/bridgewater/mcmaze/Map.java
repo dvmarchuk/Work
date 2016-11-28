@@ -101,8 +101,9 @@ public class Map {
 	 *             if there is a problem executing the SQL statement
 	 */
 	public void drop(Connection con) throws SQLException {
-		PreparedStatement ps = con.prepareStatement("DROP DATABASE " + mapName + " IF EXISTS;");
+		PreparedStatement ps = con.prepareStatement("DROP DATABASE " + mapName + ";");
 		ps.executeUpdate();
+		System.out.println("Map " + getName() + " dropped.");
 	}
 
 	/**
