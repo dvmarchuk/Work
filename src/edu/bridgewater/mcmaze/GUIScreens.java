@@ -1,9 +1,9 @@
 package edu.bridgewater.mcmaze;
 
-import java.awt.Choice;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.sun.corba.se.spi.orbutil.fsm.Action;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -51,6 +51,28 @@ public class GUIScreens extends Application {
 		launch(args);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javafx.application.Application#stop()
+	 */
+	@Override
+	public void stop() {
+		try {
+			DBInterface.terminateConnection();
+		} catch (SQLException e) {
+			System.err.println("=== PROBLEM TERMINATING CONNECTION ===");
+			e.printStackTrace();
+			System.err.println("=== END TERMINATION ERROR ===");
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
+	@Override
 	public void start(Stage myStage) throws Exception {
 		myStage.setTitle("The McMaze - Title Screen");
 		myStage.setResizable(false);
@@ -159,8 +181,14 @@ public class GUIScreens extends Application {
 
 				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-						// Code for submitting credentials to mySQL
-						// Server*****************
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
 						credPopup.close();
 					}
 				});
@@ -395,19 +423,7 @@ public class GUIScreens extends Application {
 				String rmDescription = roomDesc.getText();
 				roomDesc.setText("");
 				roomName.setText("");
-				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms)); // (String
-																							// roomName,
-																							// String
-																							// roomDesc,
-																							// boolean
-																							// isStartingRoom,
-																							// boolean
-																							// isEndingRoom,
-																							// boolean
-																							// hasMcGregor,
-																							// final
-																							// int
-																							// roomID)
+				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
 				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
 				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
 				cbFirstRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
@@ -600,7 +616,7 @@ public class GUIScreens extends Application {
 
 				saveAndFinishButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-						saveMap();
+						saveMap(newNameTextField.getText());
 						nameNewMaze.close();
 						myStage.setScene(mainScene);
 						myStage.setTitle("The McMaze - Title Screen");
@@ -633,19 +649,46 @@ public class GUIScreens extends Application {
 
 	// **********************************************************************************************************************************
 	// METHODS
-	// Moves the player based on an int direction
-	// 0 North 1 Northeast 2 East etc...
+
+	/**
+	 * move the player
+	 * 
+	 * @param direction
+	 *            <ul>
+	 *            <li>0 - north</li>
+	 *            <li>1 - north-east</li>
+	 *            <li>2 - east</li>
+	 *            <li>3 - south-east</li>
+	 *            <li>4 - south</li>
+	 *            <li>5 - south-west</li>
+	 *            <li>6 - west</li>
+	 *            <li>7 - north-west</li>
+	 *            <li>8 - up</li>
+	 *            <li>9 - down</li>
+	 *            </ul>
+	 */
 	private void movePlayer(int direction) {
 		// playerObject.movePlayer(direction);
 		// TODO implement player moving logic
 	}
-	private void saveMap(){
-		// TODO write to file
-		// send room/edge arrays somewhere
-		// make map object
-		// map.save()
+
+	private void saveMap(String mapName) {
+		try {
+			DBInterface.writeMapFile(roomList.toArray(new Room[roomList.size()]),
+					edgeList.toArray(new Edge[edgeList.size()]), new File(mapName));
+		} catch (IOException e) {
+			System.err.println("=== PROBLEM WRITING MAP FILE ===");
+			e.printStackTrace();
+			System.err.println("=== END MAP FILE PROBLEM ===");
+		}
 	}
 
+	/**
+	 * display text in GUI output area
+	 * 
+	 * @param text
+	 *            the text to display in the output area
+	 */
 	public void print(String text) {
 		outputText.appendText(text + '\n');
 	}

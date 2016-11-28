@@ -2,8 +2,11 @@ package edu.bridgewater.mcmaze;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -23,14 +26,12 @@ public class DBInterface {
 	private static Connection con;
 	// private static Object[][] queryResults;
 	private static Map map;
-	// private static String mySqlUser, mySqlPass;
+	private static String adminUser, adminPass;
 
 	/**
 	 * Establish a connection to a database (each map is represented by a
 	 * separate database)
 	 * 
-	 * @param dbName
-	 *            the name of the database
 	 * @param adminUser
 	 *            the username of the root user in MySQL
 	 * @param adminPass
@@ -40,10 +41,9 @@ public class DBInterface {
 	 * @throws SQLException
 	 *             if an error occurs when connecting
 	 */
-	public static void establishConnection(String dbName, String adminUser, String adminPass)
-			throws ClassNotFoundException, SQLException {
+	public static void establishConnection() throws ClassNotFoundException, SQLException {
 		// ensure that all information is provided for db connection
-		if (adminUser == null || adminPass == null || dbName == null)
+		if (adminUser == null || adminPass == null)
 			throw new NullPointerException();
 
 		// connect to database
@@ -55,6 +55,21 @@ public class DBInterface {
 		con = DriverManager.getConnection(dbURL, adminUser, adminPass);
 
 		System.out.printf("DB connection established:\n\tuser:%s,pass:%s\n\turl:%s\n", adminUser, adminPass, dbURL);
+	}
+
+	/**
+	 * terminate the DB connection
+	 * 
+	 * @throws SQLException
+	 *             if an error occurs while closing the connection
+	 */
+	public static void terminateConnection() throws SQLException {
+		if (con == null)
+			System.out.println("Cannot close a non-existent connection");
+		else {
+			con.close();
+			System.out.println("DB connection terminated");
+		}
 	}
 
 	/**
@@ -313,5 +328,70 @@ public class DBInterface {
 		rs.next();
 		return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
 				rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+	}
+
+	/**
+	 * set MySQL admin credentials
+	 * 
+	 * @param user
+	 *            the admin username
+	 * @param pass
+	 *            the admin password
+	 */
+	public static void setAdminCreds(String user, String pass) {
+		adminUser = user;
+		adminPass = pass;
+	}
+
+	/**
+	 * write the map file
+	 * 
+	 * @param rooms
+	 *            the rooms in the map
+	 * @param edges
+	 *            the edges in the map
+	 * @param f
+	 *            the file to write into
+	 * @throws FileNotFoundException
+	 *             if there is an I/O problem
+	 * @throws IOException
+	 *             if there is an I/O problem
+	 */
+	public static void writeMapFile(Room[] rooms, Edge[] edges, File f) throws FileNotFoundException, IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
+
+		// generate SQL statements
+		ArrayList<String> sqlStatements = new ArrayList<>();
+		// statements to create database & tables
+		sqlStatements.add("CREATE DATABASE " + map.getName() + ";");
+		sqlStatements.add("CREATE TABLE " + map.getName()
+				+ ".Rooms (RoomID INT NOT NULL, RoomName VARCHAR(255) NOT NULL, RoomDesc TEXT, HasMcGregor BOOLEAN,"
+				+ " IsEndingRoom BOOLEAN, IsStartingRoom BOOLEAN, PRIMARY KEY (RoomID));");
+		sqlStatements.add("CREATE TABLE " + map.getName()
+				+ ".Edges (EdgeID INT NOT NULL, FirstNode INT NOT NULL, SecondNode INT NOT NULL, EdgeType INT NOT NULL,"
+				+ " FOREIGN KEY (FirstNode) REFERENCES " + map.getName()
+				+ ".Rooms(RoomID) ON DELETE CASCADE, FOREIGN KEY (SecondNode) REFERENCES " + map.getName()
+				+ ".Rooms(RoomID) ON DELETE CASCADE, PRIMARY KEY (EdgeID));");
+		// statements to create rooms
+		for (Room r : rooms)
+			sqlStatements.add(r.toSQL(map.getName()));
+		// statement to create edges
+		for (Edge e : edges)
+			sqlStatements.add(e.toSQL(map.getName()));
+
+		// file header information
+		out.writeObject("unused"); // relative bg image path
+		out.writeInt(sqlStatements.size()); // num SQL statements
+		out.writeObject(map.getName()); // map name
+
+		// SQL statements
+		for (String s : sqlStatements)
+			out.writeObject(s);
+
+		// just in case
+		out.writeChar('\n');
+
+		// close resources
+		out.close();
 	}
 }

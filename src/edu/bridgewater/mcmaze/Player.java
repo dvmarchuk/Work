@@ -3,7 +3,7 @@ package edu.bridgewater.mcmaze;
 /**
  * Player Class
  * 
- * @author Alan Bowman
+ * @author Alan Bowman, Charles German
  */
 
 public class Player {
@@ -25,7 +25,7 @@ public class Player {
 	}
 
 	public void movePlayer(int direction) {
-		
+		// TODO implement player moving logic
 		movesMade++;
 	}
 
