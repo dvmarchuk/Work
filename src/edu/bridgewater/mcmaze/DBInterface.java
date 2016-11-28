@@ -357,32 +357,33 @@ public class DBInterface {
 	 * @throws IOException
 	 *             if there is an I/O problem
 	 */
-	public static void writeMapFile(Room[] rooms, Edge[] edges, File f) throws FileNotFoundException, IOException {
+	public static void writeMapFile(Room[] rooms, Edge[] edges, File f, String mapName)
+			throws FileNotFoundException, IOException {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
 
 		// generate SQL statements
 		ArrayList<String> sqlStatements = new ArrayList<>();
 		// statements to create database & tables
-		sqlStatements.add("CREATE DATABASE " + map.getName() + ";");
-		sqlStatements.add("CREATE TABLE " + map.getName()
+		sqlStatements.add("CREATE DATABASE " + mapName + ";");
+		sqlStatements.add("CREATE TABLE " + mapName
 				+ ".Rooms (RoomID INT NOT NULL, RoomName VARCHAR(255) NOT NULL, RoomDesc TEXT, HasMcGregor BOOLEAN,"
 				+ " IsEndingRoom BOOLEAN, IsStartingRoom BOOLEAN, PRIMARY KEY (RoomID));");
-		sqlStatements.add("CREATE TABLE " + map.getName()
+		sqlStatements.add("CREATE TABLE " + mapName
 				+ ".Edges (EdgeID INT NOT NULL, FirstNode INT NOT NULL, SecondNode INT NOT NULL, EdgeType INT NOT NULL,"
-				+ " FOREIGN KEY (FirstNode) REFERENCES " + map.getName()
-				+ ".Rooms(RoomID) ON DELETE CASCADE, FOREIGN KEY (SecondNode) REFERENCES " + map.getName()
+				+ " FOREIGN KEY (FirstNode) REFERENCES " + mapName
+				+ ".Rooms(RoomID) ON DELETE CASCADE, FOREIGN KEY (SecondNode) REFERENCES " + mapName
 				+ ".Rooms(RoomID) ON DELETE CASCADE, PRIMARY KEY (EdgeID));");
 		// statements to create rooms
 		for (Room r : rooms)
-			sqlStatements.add(r.toSQL(map.getName()));
+			sqlStatements.add(r.toSQL(mapName));
 		// statement to create edges
 		for (Edge e : edges)
-			sqlStatements.add(e.toSQL(map.getName()));
+			sqlStatements.add(e.toSQL(mapName));
 
 		// file header information
 		out.writeObject("unused"); // relative bg image path
 		out.writeInt(sqlStatements.size()); // num SQL statements
-		out.writeObject(map.getName()); // map name
+		out.writeObject(mapName); // map name
 
 		// SQL statements
 		for (String s : sqlStatements)

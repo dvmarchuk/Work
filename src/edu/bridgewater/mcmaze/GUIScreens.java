@@ -675,7 +675,7 @@ public class GUIScreens extends Application {
 	private void saveMap(String mapName) {
 		try {
 			DBInterface.writeMapFile(roomList.toArray(new Room[roomList.size()]),
-					edgeList.toArray(new Edge[edgeList.size()]), new File(mapName));
+					edgeList.toArray(new Edge[edgeList.size()]), new File(mapName + ".mcmaze"), mapName);
 		} catch (IOException e) {
 			System.err.println("=== PROBLEM WRITING MAP FILE ===");
 			e.printStackTrace();
