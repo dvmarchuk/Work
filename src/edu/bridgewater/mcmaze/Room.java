@@ -1,5 +1,7 @@
 package edu.bridgewater.mcmaze;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a room in memory
  * 
@@ -7,12 +9,13 @@ package edu.bridgewater.mcmaze;
  *
  */
 public class Room {
+	private static ArrayList<Integer> usedIDs;
 	private String roomName, roomDesc;
 	private boolean isStartingRoom, isEndingRoom, hasMcGregor;
-	private final int roomID;
+	private int roomID;
 
 	/**
-	 * constructor
+	 * constructor (if loading from DB)
 	 * 
 	 * @param roomName
 	 *            the name of the room
@@ -28,13 +31,36 @@ public class Room {
 	 *            the ID of this room
 	 */
 	public Room(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor,
-			final int roomID) {
-		this.setRoomName(roomName);
-		this.setRoomDesc(roomDesc);
-		this.setStartingRoom(isStartingRoom);
-		this.setEndingRoom(isEndingRoom);
-		this.setHasMcGregor(hasMcGregor);
-		this.roomID = roomID;
+			int roomID) {
+		setRoomName(roomName);
+		setRoomDesc(roomDesc);
+		setStartingRoom(isStartingRoom);
+		setEndingRoom(isEndingRoom);
+		setHasMcGregor(hasMcGregor);
+		setRoomID(roomID);
+	}
+
+	/**
+	 * constructor (if creating in editor)
+	 * 
+	 * @param roomName
+	 *            the name of the room
+	 * @param roomDesc
+	 *            the description for the room
+	 * @param isStartingRoom
+	 *            whether or not this room is the first room in the maze
+	 * @param isEndingRoom
+	 *            whether or not this room is an exit for the maze
+	 * @param hasMcGregor
+	 *            whether or not this room contains the easter egg
+	 */
+	public Room(String roomName, String roomDesc, boolean isStartingRoom, boolean isEndingRoom, boolean hasMcGregor) {
+		setRoomName(roomName);
+		setRoomDesc(roomDesc);
+		setStartingRoom(isStartingRoom);
+		setEndingRoom(isEndingRoom);
+		setHasMcGregor(hasMcGregor);
+		setRoomID(generateRoomID());
 	}
 
 	/**
@@ -117,5 +143,41 @@ public class Room {
 	 */
 	public int getRoomID() {
 		return roomID;
+	}
+
+	/**
+	 * @param roomID
+	 *            the unique roomID
+	 */
+	public void setRoomID(int roomID) {
+		// ensure list is not null
+		if (usedIDs == null)
+			usedIDs = new ArrayList<>();
+		// add ID to list of used IDs
+		usedIDs.add(roomID);
+
+		this.roomID = roomID;
+	}
+
+	/**
+	 * @return a unique, unused roomID
+	 */
+	public int generateRoomID() {
+		int id = 0;
+		do {
+			id++;
+		} while (usedIDs.contains(id));
+		return id;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// example: 1 : Kitchen
+		return getRoomID() + " : " + getRoomName();
 	}
 }

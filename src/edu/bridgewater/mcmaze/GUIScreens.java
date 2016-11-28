@@ -1,57 +1,58 @@
 package edu.bridgewater.mcmaze;
-import java.io.File;
-import java.io.IOException;
+
+import java.awt.Choice;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JTextPane;
+import com.sun.corba.se.spi.orbutil.fsm.Action;
 
-import javafx.animation.FadeTransition;
-import javafx.application.*;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.*;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.ImageView;
-import javafx.stage.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * The main class for the game application. this class handles the GUI and all
  * associated events
  *
- * @author Jason Laatz, Alan Bowman, Dennis Marchuk
+ * @author Jason Laatz, Dennis Marchuk, Charles German, Alan Bowman
  *
  */
-@SuppressWarnings("unused")
 public class GUIScreens extends Application {
-	int rooms = 0;
-	private static final String ArrayList = null;
-	ArrayList<String> roomDescriptionArray = new ArrayList<String>();
-	ArrayList<String> roomNameArray = new ArrayList<String>();
-	TextArea outputText = new TextArea();
+	private int rooms = 0;
+	private ArrayList<Room> roomList = new ArrayList<>();
+	private ArrayList<Edge> edgeList = new ArrayList<>();
+	private TextArea outputText;
+	private Room srcRoom, destRoom;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -61,7 +62,7 @@ public class GUIScreens extends Application {
 		myStage.setTitle("The McMaze - Title Screen");
 		myStage.setResizable(false);
 
-	//Nodes
+		// Nodes
 		FlowPane rootNode = new FlowPane();
 		rootNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane playNode = new BorderPane();
@@ -73,7 +74,7 @@ public class GUIScreens extends Application {
 		BorderPane makerNode3 = new BorderPane();
 		makerNode3.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-	//Scenes
+		// Scenes
 		Scene mainScene = new Scene(rootNode, 1300, 900);
 		Scene playScene = new Scene(playNode, 1300, 900);
 		Scene makerScene = new Scene(makerNode, 1300, 900);
@@ -81,7 +82,14 @@ public class GUIScreens extends Application {
 		Scene makerScene3 = new Scene(makerNode3, 1300, 900);
 		myStage.setScene(mainScene);
 
-//**********************************************************************************************************************************  MENU BAR
+		// Setting constraints for playNode's GridPane
+		GridPane.setColumnIndex(playNode, 0);
+		GridPane.setRowIndex(playNode, 0);
+		GridPane.setColumnSpan(playNode, 13);
+		GridPane.setRowSpan(playNode, 9);
+
+		// **********************************************************************************************************************************
+		// MENU BAR
 
 		Menu sqlMenu = new Menu("mySQL");
 		MenuItem login = new MenuItem("Login");
@@ -447,11 +455,13 @@ public class GUIScreens extends Application {
 			}
 		});
 
-//**********************************************************************************************************************************  MENU BAR
+		// **********************************************************************************************************************************
+		// MENU BAR
 
-//**********************************************************************************************************************************  ROOT NODE
+		// **********************************************************************************************************************************
+		// ROOT NODE
 
-	//Initializing Buttons and Label for rootNode
+		// Initializing Buttons and Label for rootNode
 		Text titleLabel = new Text("The McMaze");
 		Button playButton = new Button("Play");
 		Button makerButton = new Button("Map Maker");
@@ -477,7 +487,7 @@ public class GUIScreens extends Application {
 		titleLabel.setTranslateX(40);
 		titleLabel.setTranslateY(70);
 
-	//Actions on Root Node
+		// Actions on Root Node
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
@@ -515,18 +525,9 @@ public class GUIScreens extends Application {
 				vbox.getChildren().addAll(exitLabel, hbox);
 				vbox.setPadding(new Insets(30, 30, 30, 30));
 
-				exit.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
+				exit.setOnAction(eh -> System.exit(0));
 
-						System.exit(0);
-					}
-				});
-
-				cancel.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						exitPopup.close();
-					}
-				});
+				cancel.setOnAction(eh -> exitPopup.close());
 
 				Scene exitScene = new Scene(vbox);
 				exitPopup.setScene(exitScene);
@@ -534,12 +535,15 @@ public class GUIScreens extends Application {
 			}
 		});
 
-//**********************************************************************************************************************************  ROOT NODE
+		// **********************************************************************************************************************************
+		// ROOT NODE
 
-//**********************************************************************************************************************************  PLAY NODE
+		// **********************************************************************************************************************************
+		// PLAY NODE
 
-	// Initializing everything for playNode
+		// Initializing everything for playNode
 		TextField userInput = new TextField();
+		outputText = new TextArea();
 		Button northWestButton = new Button("North-West");
 		Button northButton = new Button("North");
 		Button northEastButton = new Button("North-East");
@@ -794,11 +798,13 @@ public class GUIScreens extends Application {
 					}
 				});
 
-//**********************************************************************************************************************************  PLAY NODE
+		// **********************************************************************************************************************************
+		// PLAY NODE
 
-//**********************************************************************************************************************************  MAKER NODE 1
+		// **********************************************************************************************************************************
+		// MAKER NODE 1
 
-	// Initializing everything for makerNode1
+		// Initializing everything for makerNode1
 		Label nameOfRoom = new Label("Name of Room : ");
 		TextField roomName = new TextField();
 		Label descOfRoom = new Label("Room Desription : ");
@@ -819,7 +825,17 @@ public class GUIScreens extends Application {
 		confirmRoomHBox.setAlignment(Pos.BASELINE_CENTER);
 		confirmRoomHBox.getChildren().addAll(addRoomButton, submitButton);
 
-	//CSS for makerNode1
+		// Initializing everything for Dennis' code (not sure where this
+		// *should* go)
+		ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
+		ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
+		ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
+		ChoiceBox<Room> cbSecondRoom = new ChoiceBox<>();
+		ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
+		ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
+		// TODO make this code integrate nicely
+
+		// CSS for makerNode1
 		nameOfRoom.setStyle("-fx-font: 45 arial;");
 		roomName.setStyle("-fx-padding: 20; -fx-font: 30 arial; -fx-background-color: transparent, black, transparent, beige;");
 		roomName.setPrefWidth(550);
@@ -831,46 +847,69 @@ public class GUIScreens extends Application {
 		addRoomButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 		submitButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 
-	//Actions on makerNode1
+		// Actions on makerNode1
 		addRoomButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-			//Code for storing data from the input areas
+				// Code for storing data from the input areas
 				myStage.setScene(makerScene);
 				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
 				roomDesc.setText("");
 				roomName.setText("");
-			//(Str roomName, Str roomDesc, bool isStartingRoom, bool isEndingRoom, bool hasMcGregor, int roomID)
-//				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms));
+				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
+				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFirstRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbSecondRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFinalRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbBonusRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
 			}
 		});
 
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
+				// Code for storing final room data from input areas
 				myStage.setScene(makerScene2);
 				myStage.setTitle("The McMaze Maker - Room Positioning");
 				rooms++;
-
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
 				roomDesc.setText("");
 				roomName.setText("");
-			//(Str roomName, Str roomDesc, bool isStartingRoom, bool isEndingRoom, bool hasMcGregor, int roomID)
-//				roomArray.add(new Room(rmName, rmDescription, false, false, false, rooms));
+				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms)); // (String
+																							// roomName,
+																							// String
+																							// roomDesc,
+																							// boolean
+																							// isStartingRoom,
+																							// boolean
+																							// isEndingRoom,
+																							// boolean
+																							// hasMcGregor,
+																							// final
+																							// int
+																							// roomID)
+				selectRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				destinationRoomChoiceBox.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFirstRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbSecondRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbFinalRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
+				cbBonusRoom.getItems().add(rooms - 1, roomList.get(rooms - 1));
 			}
 		});
 
-//**********************************************************************************************************************************  MAKER NODE 1
+		// **********************************************************************************************************************************
+		// MAKER NODE 1
 
-//**********************************************************************************************************************************  MAKER NODE 2
+		// **********************************************************************************************************************************
+		// MAKER NODE 2
 
-	// Initializing everything for makerNode2
+		// Initializing everything for makerNode2
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
-		ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
+		// TODO integrate dennis's code better
 		ToggleButton northWestButton2 = new ToggleButton("North-West");
 		ToggleButton northButton2 = new ToggleButton("North");
 		ToggleButton northEastButton2 = new ToggleButton("North-East");
@@ -909,10 +948,10 @@ public class GUIScreens extends Application {
 		HBox allUpDownHBox = new HBox(50);
 		allUpDownHBox.getChildren().addAll(allUpHBox, downButton2);
 		VBox finalVBox = new VBox(30);
-		finalVBox.getChildren().addAll(selectRoomLabel, selectRoomChoiceBox, fillerText1,
-			allUpDownHBox, fillerText2, destinationRoomChoiceBox, confirmRoomPositioningButton, nextNodeButton);
+		finalVBox.getChildren().addAll(selectRoomLabel, selectRoomChoiceBox, fillerText1, allUpDownHBox, fillerText2,
+				destinationRoomChoiceBox, confirmRoomPositioningButton, nextNodeButton);
 
-	//CSS for makerNode2
+		//CSS for makerNode2
 		selectRoomLabel.setStyle("-fx-font: 45 arial;");
 		fillerText1.setStyle("-fx-font: 35 arial;");
 		fillerText2.setStyle("-fx-font: 35 arial;");
@@ -953,97 +992,56 @@ public class GUIScreens extends Application {
 		outputRooms.setWrapText(true);
 		outputRooms.setPrefSize(500, 500);
 
-	//Actions for buttons on MakerScreen2
+		// Actions for buttons on MakerScreen2
+		confirmRoomPositioningButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				srcRoom = selectRoomChoiceBox.getValue();
+				destRoom = destinationRoomChoiceBox.getValue();
+				selectRoomChoiceBox.setValue(null);
+				destinationRoomChoiceBox.setValue(null);
+			}
+		});
+		// TODO setHasMcGregor(true) somewhere
+
 		nextNodeButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
-			//Code for storing all room positioning
+				// Code for storing all room positioning
 				myStage.setScene(makerScene3);
 				myStage.setTitle("The McMaze Maker - Event Rooms");
 			}
 		});
 
-		//0 north 8 up 9 down
-		//set north of also means set south of...
-				northButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 0);
+		// 0 north 8 up 9 down
+		// set north of also means set south of...
+		northButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 0)));
+		northEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 1)));
+		eastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 2)));
+		southEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 3)));
+		southButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 4)));
+		southWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 5)));
+		westButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 6)));
+		northWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 7)));
+		upButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 8)));
+		downButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 9)));
 
-					}
-				});
+		// **********************************************************************************************************************************
+		// MAKER NODE 2
 
-				northEastButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 1);
-					}
-				});
+		// **********************************************************************************************************************************
+		// MAKER NODE 3
 
-				eastButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 2);
-					}
-				});
-
-				southEastButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 3);
-					}
-				});
-
-				southButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 4);
-					}
-				});
-
-				southWestButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 5);
-					}
-				});
-
-				westButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 6);
-					}
-				});
-
-				northWestButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 7);
-					}
-				});
-
-
-				upButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 8);
-					}
-				});
-
-				downButton2.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent ae) {
-						//Edge edge = new Edge(srcRoom, destRoom, 9);
-					}
-				});
-
-//**********************************************************************************************************************************  MAKER NODE 2
-
-//**********************************************************************************************************************************  MAKER NODE 3
-
-	//Initializing everything for MakerNode3
+		// Initializing everything for MakerNode3
 		Label whichRoomLabel = new Label("Which Room is...");
 		Label theFirstRoomLabel = new Label("the First Room:");
-		ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
+		// TODO integrate dennis's code better
 		HBox firstRoomHBox = new HBox(30);
 		firstRoomHBox.getChildren().addAll(theFirstRoomLabel, cbFirstRoom);
 		CheckBox checkBox = new CheckBox("Enable Easter Egg Room");
 		checkBox.setIndeterminate(false);
 		Label theBonusRoomLabel = new Label("the Bonus Room:");
-		ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
 		HBox bonusRoomHBox = new HBox(30);
 		bonusRoomHBox.getChildren().addAll(theBonusRoomLabel, cbBonusRoom);
 		Label theFinalRoomLabel = new Label("the Final Room:");
-		ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
 		HBox finalRoomHBox = new HBox(30);
 		finalRoomHBox.getChildren().addAll(theFinalRoomLabel, cbFinalRoom);
 		Button confirmFinishedMapButton = new Button("Confirm and Name your Custom Map!");
@@ -1053,8 +1051,8 @@ public class GUIScreens extends Application {
 		almostAllChoicesVBox2.getChildren().addAll(whichRoomLabel, almostAllChoicesVBox);
 		VBox allMakerNode3ChoicesVBox = new VBox(100);
 		allMakerNode3ChoicesVBox.getChildren().addAll(almostAllChoicesVBox2, confirmFinishedMapButton);
-
-	//CSS for MakerNode3
+		
+		// CSS for MakerNode3
 		firstRoomHBox.setAlignment(Pos.CENTER);
 		bonusRoomHBox.setAlignment(Pos.CENTER);
 		finalRoomHBox.setAlignment(Pos.CENTER);
@@ -1076,8 +1074,7 @@ public class GUIScreens extends Application {
 		theFinalRoomLabel.setStyle("-fx-padding: 2; -fx-font: 35 arial;");
 		confirmFinishedMapButton.setStyle("-fx-padding: 12; -fx-font: 38 arial;");
 
-
-	//Actions for buttons on MakerScreen3
+		// Actions for buttons on MakerScreen3
 		confirmFinishedMapButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				Stage nameNewMaze = new Stage();
@@ -1105,6 +1102,7 @@ public class GUIScreens extends Application {
 
 				saveAndFinishButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
+						saveMap();
 						nameNewMaze.close();
 						myStage.setScene(mainScene);
 						myStage.setTitle("The McMaze - Title Screen");
@@ -1125,11 +1123,11 @@ public class GUIScreens extends Application {
 				}
 			}
 		});
+		
+		// **********************************************************************************************************************************
+		// MAKER NODE 3
 
-
-//**********************************************************************************************************************************  MAKER NODE 3
-
-//Setting everything onto the nodes to be displayed
+		// Setting everything onto the nodes to be displayed
 		rootNode.getChildren().addAll(menuBar, titleLabel, introVBox);
 		playNode.setTop(menuBar2);
 		playNode.setLeft(inputOutputVBox);
@@ -1145,17 +1143,23 @@ public class GUIScreens extends Application {
 		myStage.show();
 	}
 
-//**********************************************************************************************************************************  METHODS
+	// **********************************************************************************************************************************
+	// METHODS
 	// Moves the player based on an int direction
 	// 0 North 1 Northeast 2 East etc...
-	public void movePlayer(int direction) {
-		//playerObject.movePlayer(direction);
+	private void movePlayer(int direction) {
+		// playerObject.movePlayer(direction);
+		// TODO implement player moving logic
+	}
+	private void saveMap(){
+		// TODO write to file
+		// send room/edge arrays somewhere
+		// make map object
+		// map.save()
 	}
 
-	//Prints to the TextArea in PlayNode
-	public void print(String string){
-		outputText.appendText(string + "\n");
+	public void print(String text) {
+		outputText.appendText(text + '\n');
 	}
-
-//**********************************************************************************************************************************  METHODS
+	// TODO make sure that all methods have javadoc comments
 }
