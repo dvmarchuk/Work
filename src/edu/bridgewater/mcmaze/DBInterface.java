@@ -67,6 +67,7 @@ public class DBInterface {
 		if (con == null)
 			System.out.println("Cannot close a non-existent connection");
 		else {
+			map.drop(con);
 			con.close();
 			System.out.println("DB connection terminated");
 		}
