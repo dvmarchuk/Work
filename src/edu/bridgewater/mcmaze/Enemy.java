@@ -7,7 +7,7 @@ import java.util.Random;
  * search the maze until he is within a certain distance of the player at which
  * point he will chase the player.
  * 
- * @author Alan Bowman
+ * @author Alan Bowman, Charles German
  */
 
 public class Enemy {

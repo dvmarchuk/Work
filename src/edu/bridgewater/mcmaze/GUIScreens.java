@@ -603,6 +603,7 @@ public class GUIScreens extends Application {
 					e.printStackTrace();
 					System.err.println("=== END PLAYER PROBLEM ===");
 				}
+
 			}
 		});
 
@@ -711,6 +712,7 @@ public class GUIScreens extends Application {
 		outputText.setPrefRowCount(30);
 		outputText.setEditable(false);
 		outputText.setWrapText(true);
+		outputText.setText(""); // TODO is this necessary?
 		northWestButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
 		northButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
 		northEastButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
@@ -1286,7 +1288,17 @@ public class GUIScreens extends Application {
 	 */
 	private void movePlayer(int direction) {
 		try {
-			p.move(direction);
+			p.move(direction); // initialize player if necessary
+			if (p == null) {
+				try {
+					p = new Player(DBInterface.getStartingRoom());
+				} catch (SQLException e) {
+					System.err.println("=== PROBLEM CREATING PLAYER ===");
+					e.printStackTrace();
+					System.err.println("=== END PLAYER PROBLEM ===");
+				}
+			}
+			// move the player
 		} catch (SQLException e) {
 			System.err.println("=== PROBLEM MOVING PLAYER ===");
 			e.printStackTrace();

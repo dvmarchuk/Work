@@ -160,7 +160,7 @@ public class DBInterface {
 	public static Room[] getAdjacentRooms(final int roomID) throws SQLException {
 		// get all edges which contain the given room
 		PreparedStatement ps = con.prepareStatement("SELECT EdgeID, FirstNode, SecondNode, EdgeType FROM "
-				+ map.getName() + ".Edges WHERE FirstNode='" + roomID + "' OR SecondNode='" + roomID + "';");
+				+ map.getName() + ".Edges WHERE FirstNode='" + roomID + "';");
 		ArrayList<Room> rooms = new ArrayList<>();
 		ResultSet rs = ps.executeQuery();
 		// get all rooms that are not the given room in the edges found
@@ -228,8 +228,7 @@ public class DBInterface {
 		int edgeID = -1;
 		while (!found && rs.next()) {
 			int firstNode = rs.getInt("FirstNode");
-			int secondNode = rs.getInt("SecondNode");
-			if (firstNode == roomID || secondNode == roomID) {
+			if (firstNode == roomID) {
 				found = true;
 				edgeID = rs.getInt("EdgeID");
 			}
@@ -329,7 +328,7 @@ public class DBInterface {
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
-	public static Room getEndingRooms() throws SQLException {
+	public static Room getEndingRoom() throws SQLException {
 		// query the database
 		PreparedStatement ps = con
 				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "

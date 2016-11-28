@@ -49,6 +49,8 @@ public class Player {
 	 */
 	public void move(int direction) throws SQLException {
 		if (DBInterface.getAdjacentRoomByEdgeType(getLocationID(), direction) == null) {
+			// TODO adjust sql to only search by firstNode
+			// TODO add code to duplicate edges (but modified)
 			// print error message and return to direction choosing
 			GUIScreens.print("You cannot go that direction");
 		} else {
