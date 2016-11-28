@@ -186,7 +186,8 @@ public class Edge {
 			edgeType = this.edgeType - 4;
 		else
 			edgeType = this.edgeType == 8 ? 9 : 8;
-		return new Edge(firstNode, secondNode, edgeType, edgeID).toSQL(mapName);
+		return String.format("INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType) VALUES (%d, %d, %d, %d);",
+				mapName, edgeID, firstNode, secondNode, edgeType);
 	}
 
 	/*
