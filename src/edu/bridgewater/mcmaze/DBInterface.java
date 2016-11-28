@@ -227,7 +227,7 @@ public class DBInterface {
 		boolean found = false;
 		int edgeID = -1;
 		while (!found && rs.next()) {
-			int firstNode = rs.getInt("FirstNode");
+			int firstNode = rs.getInt("SecondNode"); // TODO verify this
 			if (firstNode == roomID) {
 				found = true;
 				edgeID = rs.getInt("EdgeID");
@@ -277,16 +277,16 @@ public class DBInterface {
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
-	public static int[] getExits(final int roomID) throws SQLException {
+	public static ArrayList<Integer> getExits(final int roomID) throws SQLException {
 		ArrayList<Integer> exits = new ArrayList<>();
 		Edge[] edges = getEdges(roomID);
 		for (Edge e : edges)
 			exits.add(e.getEdgeType());
 		// convert to array
-		int[] result = new int[exits.size()];
-		for (int i = 0; i < result.length; i++)
-			result[i] = exits.get(i);
-		return result;
+//		int[] result = new int[exits.size()];
+//		for (int i = 0; i < result.length; i++)
+//			result[i] = exits.get(i);
+		return exits;
 	}
 
 	/**

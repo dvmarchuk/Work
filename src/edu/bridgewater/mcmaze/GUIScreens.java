@@ -1311,12 +1311,12 @@ public class GUIScreens extends Application {
 	 *            the edge to add/modify
 	 */
 	private void updateEdgeList(Edge e) {
-		// this is just a hack since there were weird design conflicts
-		int realFirstNode = e.getSecondNode();
-		int realSecondNode = e.getFirstNode();
-		e.setFirstNode(realFirstNode);
-		e.setSecondNode(realSecondNode);
-		// actually update the edge list
+//		// this is just a hack since there were weird design conflicts
+//		int realFirstNode = e.getSecondNode();
+//		int realSecondNode = e.getFirstNode();
+//		e.setFirstNode(realFirstNode);
+//		e.setSecondNode(realSecondNode);
+//		// actually update the edge list
 		if (edgeConfirmed) {
 			edgeList.add(e);
 			genOutputRoomInfo(e);
@@ -1345,7 +1345,7 @@ public class GUIScreens extends Application {
 	 *            integer representation of direction
 	 * @return corresponding string representation of direction
 	 */
-	private String translateEdgeType(int type) {
+	public static String translateEdgeType(int type) {
 		String result = "";
 		switch (type) {
 		case 0:
