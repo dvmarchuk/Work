@@ -257,9 +257,9 @@ public class GUIScreens extends Application {
 				vbox.getChildren().addAll(exitLabel, hbox);
 				vbox.setPadding(new Insets(30, 30, 30, 30));
 
-				exit.setOnAction(eh -> System.exit(0));
+				exit.setOnAction(eventHandler -> System.exit(0));
 
-				cancel.setOnAction(eh -> exitPopup.close());
+				cancel.setOnAction(eventHandler -> exitPopup.close());
 
 				Scene exitScene = new Scene(vbox);
 				exitPopup.setScene(exitScene);
@@ -336,16 +336,16 @@ public class GUIScreens extends Application {
 
 		// Directional button event listeners for
 		// PlayNode**************************************************************************************************************************
-		northButton.setOnAction(eh -> movePlayer(0));
-		northEastButton.setOnAction(eh -> movePlayer(1));
-		eastButton.setOnAction(eh -> movePlayer(2));
-		southEastButton.setOnAction(eh -> movePlayer(3));
-		southButton.setOnAction(eh -> movePlayer(4));
-		southWestButton.setOnAction(eh -> movePlayer(5));
-		westButton.setOnAction(eh -> movePlayer(6));
-		northWestButton.setOnAction(eh -> movePlayer(7));
-		upButton.setOnAction(eh -> movePlayer(8));
-		downButton.setOnAction(eh -> movePlayer(9));
+		northButton.setOnAction(eventHandler -> movePlayer(0));
+		northEastButton.setOnAction(eventHandler -> movePlayer(1));
+		eastButton.setOnAction(eventHandler -> movePlayer(2));
+		southEastButton.setOnAction(eventHandler -> movePlayer(3));
+		southButton.setOnAction(eventHandler -> movePlayer(4));
+		southWestButton.setOnAction(eventHandler -> movePlayer(5));
+		westButton.setOnAction(eventHandler -> movePlayer(6));
+		northWestButton.setOnAction(eventHandler -> movePlayer(7));
+		upButton.setOnAction(eventHandler -> movePlayer(8));
+		downButton.setOnAction(eventHandler -> movePlayer(9));
 
 		// **********************************************************************************************************************************
 		// PLAY NODE
@@ -535,16 +535,16 @@ public class GUIScreens extends Application {
 
 		// 0 north 8 up 9 down
 		// set north of also means set south of...
-		northButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 0)));
-		northEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 1)));
-		eastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 2)));
-		southEastButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 3)));
-		southButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 4)));
-		southWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 5)));
-		westButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 6)));
-		northWestButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 7)));
-		upButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 8)));
-		downButton2.setOnAction(eh -> edgeList.add(new Edge(srcRoom, destRoom, 9)));
+		northButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 0)));
+		northEastButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 1)));
+		eastButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 2)));
+		southEastButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 3)));
+		southButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 4)));
+		southWestButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 5)));
+		westButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 6)));
+		northWestButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 7)));
+		upButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 8)));
+		downButton2.setOnAction(eventHandler -> edgeList.add(new Edge(srcRoom, destRoom, 9)));
 
 		// **********************************************************************************************************************************
 		// MAKER NODE 2
