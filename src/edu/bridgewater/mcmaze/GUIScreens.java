@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import com.sun.corba.se.spi.orbutil.fsm.Action;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,6 +22,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +34,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,7 +61,7 @@ public class GUIScreens extends Application {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javafx.application.Application#stop()
 	 */
 	@Override
@@ -70,7 +77,7 @@ public class GUIScreens extends Application {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 */
 	@Override
@@ -81,17 +88,14 @@ public class GUIScreens extends Application {
 		// Nodes
 		FlowPane rootNode = new FlowPane();
 		rootNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-		GridPane playNode = new GridPane();
+		BorderPane playNode = new BorderPane();
 		playNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode = new BorderPane();
-		makerNode
-				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode2 = new BorderPane();
-		makerNode2
-				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode2.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane makerNode3 = new BorderPane();
-		makerNode3
-				.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		makerNode3.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
 		// Scenes
 		Scene mainScene = new Scene(rootNode, 1300, 900);
@@ -100,12 +104,6 @@ public class GUIScreens extends Application {
 		Scene makerScene2 = new Scene(makerNode2, 1300, 900);
 		Scene makerScene3 = new Scene(makerNode3, 1300, 900);
 		myStage.setScene(mainScene);
-
-		// Setting constraints for playNode's GridPane
-		GridPane.setColumnIndex(playNode, 0);
-		GridPane.setRowIndex(playNode, 0);
-		GridPane.setColumnSpan(playNode, 13);
-		GridPane.setRowSpan(playNode, 9);
 
 		// **********************************************************************************************************************************
 		// MENU BAR
@@ -120,34 +118,314 @@ public class GUIScreens extends Application {
 		MenuItem mainScreenMenuItem = new MenuItem("Return to Main Screen");
 		mainScreenMenu.getItems().addAll(mainScreenMenuItem);
 
+		Menu sqlMenu2 = new Menu("mySQL");
+		MenuItem login2 = new MenuItem("Login");
+		sqlMenu2.getItems().addAll(login2);
+		Menu loadMenu2 = new Menu("Load");
+		MenuItem loadMap2 = new MenuItem("Load Map");
+		loadMenu2.getItems().addAll(loadMap2);
+		Menu mainScreenMenu2 = new Menu("Back");
+		MenuItem mainScreenMenuItem2 = new MenuItem("Return to Main Screen");
+		mainScreenMenu2.getItems().addAll(mainScreenMenuItem2);
+
+		Menu sqlMenu3 = new Menu("mySQL");
+		MenuItem login3 = new MenuItem("Login");
+		sqlMenu3.getItems().addAll(login3);
+		Menu loadMenu3 = new Menu("Load");
+		MenuItem loadMap3 = new MenuItem("Load Map");
+		loadMenu3.getItems().addAll(loadMap3);
+		Menu mainScreenMenu3 = new Menu("Back");
+		MenuItem mainScreenMenuItem3 = new MenuItem("Return to Main Screen");
+		mainScreenMenu3.getItems().addAll(mainScreenMenuItem3);
+
+		Menu sqlMenu4 = new Menu("mySQL");
+		MenuItem login4 = new MenuItem("Login");
+		sqlMenu4.getItems().addAll(login4);
+		Menu loadMenu4 = new Menu("Load");
+		MenuItem loadMap4 = new MenuItem("Load Map");
+		loadMenu4.getItems().addAll(loadMap4);
+		Menu mainScreenMenu4 = new Menu("Back");
+		MenuItem mainScreenMenuItem4 = new MenuItem("Return to Main Screen");
+		mainScreenMenu4.getItems().addAll(mainScreenMenuItem4);
+
+		Menu sqlMenu5 = new Menu("mySQL");
+		MenuItem login5 = new MenuItem("Login");
+		sqlMenu5.getItems().addAll(login5);
+		Menu loadMenu5 = new Menu("Load");
+		MenuItem loadMap5 = new MenuItem("Load Map");
+		loadMenu5.getItems().addAll(loadMap5);
+		Menu mainScreenMenu5 = new Menu("Back");
+		MenuItem mainScreenMenuItem5 = new MenuItem("Return to Main Screen");
+		mainScreenMenu5.getItems().addAll(mainScreenMenuItem5);
+
 		MenuBar menuBar = new MenuBar();
 		menuBar.setPadding(new Insets(0, 1250, 0, 0));
 		menuBar.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
 
 		MenuBar menuBar2 = new MenuBar();
-		menuBar2.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar2.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar2.getMenus().addAll(sqlMenu2, loadMenu2, mainScreenMenu2);
 
 		MenuBar menuBar3 = new MenuBar();
 		menuBar3.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar3.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar3.getMenus().addAll(sqlMenu3, loadMenu3, mainScreenMenu3);
 
 		MenuBar menuBar4 = new MenuBar();
 		menuBar4.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar4.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar4.getMenus().addAll(sqlMenu4, loadMenu4, mainScreenMenu4);
 
 		MenuBar menuBar5 = new MenuBar();
 		menuBar5.setPadding(new Insets(0, 1100, 0, 0));
-		menuBar5.getMenus().addAll(sqlMenu, loadMenu, mainScreenMenu);
+		menuBar5.getMenus().addAll(sqlMenu5, loadMenu5, mainScreenMenu5);
 
 		mainScreenMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(mainScene);
-				myStage.setTitle("The McMaze");
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem4.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
+			}
+		});
+
+		mainScreenMenuItem5.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				myStage.setScene(mainScene);
+				myStage.setTitle("The McMaze - Title Screen");
 			}
 		});
 
 		login.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
+						credPopup.close();
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login4.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				Stage credPopup = new Stage();
+				credPopup.initModality(Modality.APPLICATION_MODAL);
+				credPopup.initOwner(myStage);
+				credPopup.setTitle("The McMaze - mySQL Credentials");
+				credPopup.setResizable(false);
+
+				Label credLabel = new Label("Please enter your mySQL login information:");
+				Label usernameLabel = new Label("Username:");
+				Label passwordLabel = new Label("Password:");
+				TextField enterUsername = new TextField();
+				PasswordField enterPassword = new PasswordField();
+				Button submitCredButton = new Button("Login");
+
+				credLabel.setStyle("-fx-font: 20 arial;");
+				usernameLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				passwordLabel.setStyle("-fx-padding: 10; -fx-font: 16 arial;");
+				enterUsername.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				enterPassword.setStyle("-fx-padding: 8; -fx-font: 16 arial;");
+				submitCredButton.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+
+				HBox usernameHBox = new HBox(8);
+				usernameHBox.getChildren().addAll(usernameLabel, enterUsername);
+				usernameHBox.setAlignment(Pos.CENTER);
+				HBox passwordHBox = new HBox(9);
+				passwordHBox.getChildren().addAll(passwordLabel, enterPassword);
+				passwordHBox.setAlignment(Pos.CENTER);
+				VBox credVBox = new VBox(15);
+				credVBox.getChildren().addAll(credLabel, usernameHBox, passwordHBox, submitCredButton);
+				credVBox.setPadding(new Insets(30, 30, 30, 30));
+				credVBox.setAlignment(Pos.CENTER);
+
+				submitCredButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						DBInterface.setAdminCreds(enterUsername.getText(), enterPassword.getText());
+						try {
+							DBInterface.establishConnection();
+						} catch (ClassNotFoundException | SQLException e) {
+							System.err.print("=== PROBLEM ESTABLISHING SQL CONNECTION ===");
+							e.printStackTrace();
+							System.err.println("=== END SQL CONNECTION PROBLEM ===");
+						}
+						credPopup.close();
+					}
+				});
+
+				Scene loginScene = new Scene(credVBox);
+				credPopup.setScene(loginScene);
+				credPopup.show();
+			}
+		});
+
+		login5.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				Stage credPopup = new Stage();
 				credPopup.initModality(Modality.APPLICATION_MODAL);
@@ -215,6 +493,66 @@ public class GUIScreens extends Application {
 			}
 		});
 
+		loadMap2.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
+			}
+		});
+
+		loadMap3.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
+			}
+		});
+
+		loadMap4.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
+			}
+		});
+
+		loadMap5.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
+			}
+		});
+
 		// **********************************************************************************************************************************
 		// MENU BAR
 
@@ -222,18 +560,30 @@ public class GUIScreens extends Application {
 		// ROOT NODE
 
 		// Initializing Buttons and Label for rootNode
-		Label titleLabel = new Label("The McMaze");
+		Text titleLabel = new Text("The McMaze");
 		Button playButton = new Button("Play");
 		Button makerButton = new Button("Map Maker");
 		Button quitButton = new Button("Quit");
+		DropShadow dropShadow = new DropShadow();
 
 		// CSS for rootNode
-		titleLabel.setStyle("-fx-font-size: 60 arial;");
-		titleLabel.setTextFill(Color.BLUE);
-		titleLabel.setPadding(new Insets(70, 1100, 70, 40));
-		playButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
-		makerButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
-		quitButton.setStyle("-fx-padding: 20; -fx-font: 50 arial;");
+		titleLabel.setStyle("-fx-font-size: 90 arial;");
+		playButton.setStyle("-fx-padding: 20; -fx-font: 60 arial;");
+		makerButton.setStyle("-fx-padding: 20; -fx-font: 60 arial;");
+		quitButton.setStyle("-fx-padding: 20; -fx-font: 60 arial;");
+
+		VBox introVBox = new VBox(60);
+		introVBox.setPadding(new Insets(130, 1100, 50, 60));
+		introVBox.getChildren().addAll(titleLabel, playButton, makerButton, quitButton);
+
+		dropShadow.setOffsetY(3.5);
+		dropShadow.setColor(Color.color(.4, .4, .4));
+		titleLabel.setEffect(dropShadow);
+		titleLabel.setCache(true);
+		titleLabel.setFill(Color.BLUE);
+		titleLabel.setFont(Font.font(null, FontWeight.BOLD, 32));
+		titleLabel.setTranslateX(40);
+		titleLabel.setTranslateY(70);
 
 		// Actions on Root Node
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -303,42 +653,62 @@ public class GUIScreens extends Application {
 		Button upButton = new Button("Up");
 		Button downButton = new Button("Down");
 		Button helpButton = new Button("Help");
+		Label directionalSeclectorLabel = new Label("Move in a Direction:");
+		Label helpLabel = new Label("Stuck? Get Help!");
 
-		VBox introVBox = new VBox(50);
-		introVBox.setPadding(new Insets(50, 0, 0, 60));
-		introVBox.getChildren().addAll(playButton, makerButton, quitButton);
-		VBox leftArrowsVBox = new VBox(15);
+		HBox upDownHBox = new HBox(50);
+		upDownHBox.setPadding(new Insets(0, 0, 100, 36));
+		upDownHBox.getChildren().addAll(upButton, downButton);
+		VBox upDownLabeledVBox = new VBox(50);
+		upDownLabeledVBox.getChildren().addAll(directionalSeclectorLabel, upDownHBox);
+		VBox leftArrowsVBox = new VBox(60);
 		leftArrowsVBox.setPadding(new Insets(0, 15, 0, 0));
 		leftArrowsVBox.getChildren().addAll(northWestButton, westButton, southWestButton);
-		VBox middleArrowsVBox = new VBox(85);
+		VBox middleArrowsVBox = new VBox(170);
 		middleArrowsVBox.getChildren().addAll(northButton, southButton);
-		VBox rightArrowsVBox = new VBox(15);
+		VBox rightArrowsVBox = new VBox(60);
 		rightArrowsVBox.setPadding(new Insets(0, 0, 0, 15));
 		rightArrowsVBox.getChildren().addAll(northEastButton, eastButton, southEastButton);
+		VBox helpButtonVBox = new VBox(20);
+		helpButtonVBox.getChildren().addAll(helpLabel, helpButton);
 		VBox centerVBox = new VBox(100);
-		centerVBox.getChildren().addAll(middleArrowsVBox, helpButton);
-		VBox inputOutputVBox = new VBox(100);
+		centerVBox.getChildren().addAll(middleArrowsVBox, helpButtonVBox);
+		HBox allArrowsHBox = new HBox(20);
+		allArrowsHBox.getChildren().addAll(leftArrowsVBox, centerVBox, rightArrowsVBox);
+		VBox fullRightPaneVBox = new VBox(20);
+		fullRightPaneVBox.setPadding(new Insets(150, 22, 0, 0));
+		fullRightPaneVBox.getChildren().addAll(upDownLabeledVBox, allArrowsHBox);
+		VBox inputOutputVBox = new VBox(20);
 		inputOutputVBox.getChildren().addAll(outputText, userInput);
 
-		// CSS for playNode
-		userInput.setStyle("-fx-padding: 10; -fx-font: 20 arial;");
+	// CSS for playNode
+		Platform.runLater(new Runnable() {
+	// Sets the player's cursor automatically on the TextField
+            @Override
+            public void run() {
+                userInput.requestFocus();
+            }
+        });
+		userInput.setStyle("-fx-padding: 10; -fx-font: 20 arial;-fx-background-color: transparent, black, transparent, beige;");
 		userInput.setPadding(new Insets(0, 0, 0, 25));
 		userInput.setPrefWidth(700);
-		outputText.setStyle("-fx-padding: 5; -fx-font: 22 arial;");
+		outputText.setStyle("-fx-padding: 5; -fx-font: 22 arial;-fx-background-color: transparent, gray, transparent, grey;");
+		outputText.setPrefRowCount(30);
 		outputText.setEditable(false);
 		outputText.setWrapText(true);
-		northWestButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		northButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		northEastButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		eastButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		westButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		southEastButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		southButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		southWestButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		westButton.setStyle("-fx-padding: 5; -fx-base: #b6e7c9;");
-		upButton.setStyle("");
-		downButton.setStyle("");
-		helpButton.setStyle("");
+		northWestButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		northButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		northEastButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		eastButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		westButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		southEastButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		southButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		southWestButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		westButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		upButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		downButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
+		helpButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #00e64d;");
+		helpButton.setTextFill(Color.DEEPPINK);
 		northWestButton.setMinSize(100, 50);
 		northButton.setMinSize(100, 50);
 		northEastButton.setMinSize(100, 50);
@@ -347,21 +717,184 @@ public class GUIScreens extends Application {
 		southButton.setMinSize(100, 50);
 		southWestButton.setMinSize(100, 50);
 		westButton.setMinSize(100, 50);
-		upButton.setMinSize(100, 50);
-		downButton.setMinSize(100, 50);
+		upButton.setMinSize(125, 62);
+		downButton.setMinSize(125, 62);
+		helpButton.setMinSize(50, 25);
+		directionalSeclectorLabel.setStyle("-fx-font: 35 arial");
+		directionalSeclectorLabel.setAlignment(Pos.CENTER);
+		helpLabel.setStyle("-fx-font: 10 arial");
+		helpLabel.setAlignment(Pos.CENTER);
+		helpButtonVBox.setAlignment(Pos.CENTER);
+		upDownLabeledVBox.setAlignment(Pos.CENTER);
 
-		// Directional button event listeners for
-		// PlayNode**************************************************************************************************************************
-		northButton.setOnAction(eventHandler -> movePlayer(0));
-		northEastButton.setOnAction(eventHandler -> movePlayer(1));
-		eastButton.setOnAction(eventHandler -> movePlayer(2));
-		southEastButton.setOnAction(eventHandler -> movePlayer(3));
-		southButton.setOnAction(eventHandler -> movePlayer(4));
-		southWestButton.setOnAction(eventHandler -> movePlayer(5));
-		westButton.setOnAction(eventHandler -> movePlayer(6));
-		northWestButton.setOnAction(eventHandler -> movePlayer(7));
-		upButton.setOnAction(eventHandler -> movePlayer(8));
-		downButton.setOnAction(eventHandler -> movePlayer(9));
+
+		// Actions for Buttons on PlayNode
+				helpButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						print("Press a directional button to travel in that direction or type in \"move\" followed by the direction you want to travel. "
+								+ "Try to make it to the exit before McGregor catches you! WARNING: He's not a vegetarian.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+				northButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(0);
+						print("You attempt to travel north.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				northEastButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(1);
+						print("You attempt to travel north-east.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				eastButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(2);
+						print("You attempt to travel east.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				southEastButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(3);
+						print("You attempt to travel south-east.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				southButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(4);
+						print("You attempt to travel south.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				southWestButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(5);
+						print("You attempt to travel south-west.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				westButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(6);
+						print("You attempt to travel west.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				northWestButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(7);
+						print("You attempt to travel north-west.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				upButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(8);
+						print("You attempt to travel up.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				downButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+						movePlayer(9);
+						print("You attempt to travel down.");
+						Platform.runLater(new Runnable() {
+							// Sets the player's cursor automatically on the TextField
+						            @Override
+						            public void run() {
+						                userInput.requestFocus();
+						            }
+						        });
+					}
+				});
+
+				userInput.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent ae) {
+							print(userInput.getText());
+							userInput.clear();
+							Platform.runLater(new Runnable() {
+								// Sets the player's cursor automatically on the TextField
+							            @Override
+							            public void run() {
+							                userInput.requestFocus();
+							            }
+							        });
+					}
+				});
 
 		// **********************************************************************************************************************************
 		// PLAY NODE
@@ -386,7 +919,7 @@ public class GUIScreens extends Application {
 		VBox nameDescVBox = new VBox(20);
 		nameDescVBox.getChildren().addAll(nameHBox, descVBox);
 		HBox confirmRoomHBox = new HBox(70);
-		confirmRoomHBox.setPadding(new Insets(0, 0, 100, 0));
+		confirmRoomHBox.setPadding(new Insets(50, 0, 50, 0));
 		confirmRoomHBox.setAlignment(Pos.BASELINE_CENTER);
 		confirmRoomHBox.getChildren().addAll(addRoomButton, submitButton);
 
@@ -401,11 +934,14 @@ public class GUIScreens extends Application {
 		// TODO make this code integrate nicely
 
 		// CSS for makerNode1
-		nameOfRoom.setStyle("-fx-font: 40 arial;");
-		roomName.setStyle("-fx-padding: 20; -fx-font: 30 arial;");
+		nameOfRoom.setStyle("-fx-font: 45 arial;");
+		roomName.setStyle("-fx-padding: 20; -fx-font: 30 arial; -fx-background-color: transparent, black, transparent, beige;");
+		roomName.setPrefWidth(550);
 		BorderPane.setAlignment(nameHBox, Pos.CENTER);
 		descOfRoom.setStyle("-fx-font: 30 arial;");
-		roomDesc.setStyle("-fx-padding: 20; -fx-font: 20 arial;");
+		descOfRoom.setPadding(new Insets(0, 0, 0, 20));
+		roomDesc.setStyle("-fx-padding: 20; -fx-font: 20 arial; -fx-background-color: transparent, black, transparent, gray; text-area-background: beige; ");
+		roomDesc.setPrefRowCount(20);
 		addRoomButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 		submitButton.setStyle("-fx-padding: 20; -fx-font: 25 arial;");
 
@@ -460,24 +996,30 @@ public class GUIScreens extends Application {
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
 		// TODO integrate dennis's code better
-		// ChoiceBox<Room> selectRoomChoiceBox = new ChoiceBox<>();
-		// ChoiceBox<Room> destinationRoomChoiceBox = new ChoiceBox<>();
-		Button northWestButton2 = new Button("North-West");
-		Button northButton2 = new Button("North");
-		Button northEastButton2 = new Button("North-East");
-		Button eastButton2 = new Button("East");
-		Button southEastButton2 = new Button("South-East");
-		Button southButton2 = new Button("South");
-		Button southWestButton2 = new Button("South-West");
-		Button westButton2 = new Button("West");
-		Button upButton2 = new Button("Above");
-		Button downButton2 = new Button("Below");
+		ToggleButton northWestButton2 = new ToggleButton("North-West");
+		ToggleButton northButton2 = new ToggleButton("North");
+		ToggleButton northEastButton2 = new ToggleButton("North-East");
+		ToggleButton eastButton2 = new ToggleButton("East");
+		ToggleButton southEastButton2 = new ToggleButton("South-East");
+		ToggleButton southButton2 = new ToggleButton("South");
+		ToggleButton southWestButton2 = new ToggleButton("South-West");
+		ToggleButton westButton2 = new ToggleButton("West");
+		ToggleButton upButton2 = new ToggleButton("Above");
+		ToggleButton downButton2 = new ToggleButton("Below");
 		Button confirmRoomPositioningButton = new Button("Confirm this room position");
 		Button nextNodeButton = new Button("Continue to next screen");
 		TextArea outputRooms = new TextArea();
-		outputRooms.setStyle("-fx-padding: 5; -fx-font: 22 arial;");
-		outputRooms.setEditable(false);
-		outputRooms.setWrapText(true);
+		ToggleGroup toggleGroup = new ToggleGroup();
+		northWestButton2.setToggleGroup(toggleGroup);
+		northButton2.setToggleGroup(toggleGroup);
+		northEastButton2.setToggleGroup(toggleGroup);
+		eastButton2.setToggleGroup(toggleGroup);
+		southEastButton2.setToggleGroup(toggleGroup);
+		southButton2.setToggleGroup(toggleGroup);
+		southWestButton2.setToggleGroup(toggleGroup);
+		westButton2.setToggleGroup(toggleGroup);
+		upButton2.setToggleGroup(toggleGroup);
+		downButton2.setToggleGroup(toggleGroup);
 
 		VBox leftSideVBox = new VBox(50);
 		leftSideVBox.getChildren().addAll(northWestButton2, westButton2, southWestButton2);
@@ -485,7 +1027,7 @@ public class GUIScreens extends Application {
 		middleVBox.getChildren().addAll(northButton2, southButton2);
 		VBox rightSideVBox = new VBox(50);
 		rightSideVBox.getChildren().addAll(northEastButton2, eastButton2, southEastButton2);
-		HBox allDirectionalButtonsHBox = new HBox(15);
+		HBox allDirectionalButtonsHBox = new HBox(35);
 		allDirectionalButtonsHBox.getChildren().addAll(leftSideVBox, middleVBox, rightSideVBox);
 		HBox allUpHBox = new HBox(50);
 		allUpHBox.getChildren().addAll(upButton2, allDirectionalButtonsHBox);
@@ -495,30 +1037,32 @@ public class GUIScreens extends Application {
 		finalVBox.getChildren().addAll(selectRoomLabel, selectRoomChoiceBox, fillerText1, allUpDownHBox, fillerText2,
 				destinationRoomChoiceBox, confirmRoomPositioningButton, nextNodeButton);
 
-		// CSS for makerNode2
-		selectRoomLabel.setStyle("-fx-font: 18 arial;");
-		fillerText1.setStyle("-fx-font: 18 arial;");
-		fillerText2.setStyle("-fx-font: 18 arial;");
-		selectRoomChoiceBox.setStyle("-fx-padding: 2; -fx-font: 12 arial;");
-		destinationRoomChoiceBox.setStyle("-fx-padding: 2; -fx-font: 12 arial;");
-		northWestButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		northButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		northEastButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		eastButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		southEastButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		southButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		southWestButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		westButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		upButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		downButton2.setStyle("-fx-padding: 2; -fx-font: 14 arial;");
-		confirmRoomPositioningButton.setStyle("-fx-padding: 10; -fx-font: 24 arial;");
+		//CSS for makerNode2
+		selectRoomLabel.setStyle("-fx-font: 45 arial;");
+		fillerText1.setStyle("-fx-font: 35 arial;");
+		fillerText2.setStyle("-fx-font: 35 arial;");
+		selectRoomChoiceBox.setStyle("-fx-padding: 4; -fx-font: 16 arial;");
+		destinationRoomChoiceBox.setStyle("-fx-padding: 4; -fx-font: 16 arial;");
+		northWestButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		northButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		northEastButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		eastButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		southEastButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		southButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		southWestButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		westButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		upButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		downButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
+		confirmRoomPositioningButton.setStyle("-fx-padding: 10; -fx-font: 28 arial;");
 		nextNodeButton.setStyle("-fx-padding: 10; -fx-font: 24 arial;");
 		allDirectionalButtonsHBox.setAlignment(Pos.CENTER);
 		allUpHBox.setAlignment(Pos.CENTER);
 		allUpDownHBox.setAlignment(Pos.CENTER);
 		finalVBox.setAlignment(Pos.CENTER);
 		selectRoomChoiceBox.setMinSize(150, 50);
+		selectRoomChoiceBox.setPrefWidth(550);
 		destinationRoomChoiceBox.setMinSize(150, 50);
+		destinationRoomChoiceBox.setPrefWidth(550);
 		northWestButton2.setMinSize(100, 50);
 		northButton2.setMinSize(100, 50);
 		northEastButton2.setMinSize(100, 50);
@@ -529,6 +1073,10 @@ public class GUIScreens extends Application {
 		westButton2.setMinSize(100, 50);
 		upButton2.setMinSize(100, 50);
 		downButton2.setMinSize(100, 50);
+		outputRooms.setStyle("-fx-padding: 5; -fx-font: 22 arial; -fx-background-color: transparent, gray, transparent, gray;");
+		outputRooms.setEditable(false);
+		outputRooms.setWrapText(true);
+		outputRooms.setPrefSize(500, 500);
 
 		// Actions for buttons on MakerScreen2
 		confirmRoomPositioningButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -578,39 +1126,47 @@ public class GUIScreens extends Application {
 
 		// Initializing everything for MakerNode3
 		Label whichRoomLabel = new Label("Which Room is...");
-		Label theFirstRoomLabel = new Label("the first room:");
+		Label theFirstRoomLabel = new Label("the First Room:");
 		// TODO integrate dennis's code better
-		// ChoiceBox<Room> cbFirstRoom = new ChoiceBox<>();
 		HBox firstRoomHBox = new HBox(30);
 		firstRoomHBox.getChildren().addAll(theFirstRoomLabel, cbFirstRoom);
 		CheckBox checkBox = new CheckBox("Enable Easter Egg Room");
 		checkBox.setIndeterminate(false);
-		Label theBonusRoomLabel = new Label("the bonus room:");
-		// ChoiceBox<Room> cbBonusRoom = new ChoiceBox<>();
+		Label theBonusRoomLabel = new Label("the Bonus Room:");
 		HBox bonusRoomHBox = new HBox(30);
 		bonusRoomHBox.getChildren().addAll(theBonusRoomLabel, cbBonusRoom);
-		Label theFinalRoomLabel = new Label("the final room:");
-		// ChoiceBox<Room> cbFinalRoom = new ChoiceBox<>();
+		Label theFinalRoomLabel = new Label("the Final Room:");
 		HBox finalRoomHBox = new HBox(30);
 		finalRoomHBox.getChildren().addAll(theFinalRoomLabel, cbFinalRoom);
 		Button confirmFinishedMapButton = new Button("Confirm and Name your Custom Map!");
-		VBox allMakerNode3ChoicesVBox = new VBox(40);
-		allMakerNode3ChoicesVBox.getChildren().addAll(whichRoomLabel, firstRoomHBox, checkBox, bonusRoomHBox,
-				finalRoomHBox, confirmFinishedMapButton);
+		VBox almostAllChoicesVBox = new VBox(50);
+		almostAllChoicesVBox.getChildren().addAll(firstRoomHBox, checkBox, bonusRoomHBox, finalRoomHBox);
+		VBox almostAllChoicesVBox2 = new VBox(95);
+		almostAllChoicesVBox2.getChildren().addAll(whichRoomLabel, almostAllChoicesVBox);
+		VBox allMakerNode3ChoicesVBox = new VBox(100);
+		allMakerNode3ChoicesVBox.getChildren().addAll(almostAllChoicesVBox2, confirmFinishedMapButton);
 
 		// CSS for MakerNode3
 		firstRoomHBox.setAlignment(Pos.CENTER);
 		bonusRoomHBox.setAlignment(Pos.CENTER);
 		finalRoomHBox.setAlignment(Pos.CENTER);
+		almostAllChoicesVBox.setAlignment(Pos.CENTER);
+		almostAllChoicesVBox2.setAlignment(Pos.CENTER);
 		allMakerNode3ChoicesVBox.setAlignment(Pos.CENTER);
-		whichRoomLabel.setStyle("-fx-font: 24 arial;");
-		theFirstRoomLabel.setStyle("-fx-font: 20 arial;");
-		cbFirstRoom.setStyle("-fx-font: 20 arial;");
-		checkBox.setStyle("-fx-padding: 2; -fx-font: 18 arial;");
-		theBonusRoomLabel.setStyle("-fx-font: 20 arial;");
-		cbBonusRoom.setStyle("-fx-padding: 2; -fx-font: 20 arial;");
-		theFinalRoomLabel.setStyle("-fx-padding: 2; -fx-font: 20 arial;");
-		confirmFinishedMapButton.setStyle("-fx-padding: 8; -fx-font: 24 arial;");
+		whichRoomLabel.setStyle("-fx-font: 55 arial;");
+		theFirstRoomLabel.setStyle("-fx-font: 35 arial;");
+		cbFirstRoom.setStyle("-fx-padding: 2; -fx-font: 35 arial;");
+		cbFirstRoom.setPrefWidth(650);
+		checkBox.setStyle("-fx-padding: 2; -fx-font: 33 arial;");
+		theBonusRoomLabel.setStyle("-fx-font: 35 arial;");
+		theBonusRoomLabel.setTextFill(Color.GRAY);
+		cbBonusRoom.setStyle("-fx-padding: 2; -fx-font: 35 arial;");
+		cbBonusRoom.setDisable(true);
+		cbBonusRoom.setPrefWidth(650);
+		cbFinalRoom.setStyle("-fx-padding: 2; -fx-font: 35 arial;");
+		cbFinalRoom.setPrefWidth(650);
+		theFinalRoomLabel.setStyle("-fx-padding: 2; -fx-font: 35 arial;");
+		confirmFinishedMapButton.setStyle("-fx-padding: 12; -fx-font: 38 arial;");
 
 		// Actions for buttons on MakerScreen3
 		confirmFinishedMapButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -649,23 +1205,33 @@ public class GUIScreens extends Application {
 			}
 		});
 
+		checkBox.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent ae) {
+				if(checkBox.isSelected()){
+					theBonusRoomLabel.setTextFill(Color.BLACK);
+					cbBonusRoom.setDisable(false);
+				}
+				else{
+					theBonusRoomLabel.setTextFill(Color.GRAY);
+					cbBonusRoom.setDisable(true);
+				}
+			}
+		});
+
 		// **********************************************************************************************************************************
 		// MAKER NODE 3
 
 		// Setting everything onto the nodes to be displayed
 		rootNode.getChildren().addAll(menuBar, titleLabel, introVBox);
-		playNode.add(menuBar2, 0, 0, 13, 1);
-		playNode.add(inputOutputVBox, 0, 2);
-		playNode.add(upButton, 9, 2);
-		playNode.add(leftArrowsVBox, 9, 3);
-		playNode.add(centerVBox, 10, 3);
-		playNode.add(downButton, 11, 2);
-		playNode.add(rightArrowsVBox, 11, 3);
+		playNode.setTop(menuBar2);
+		playNode.setLeft(inputOutputVBox);
+		playNode.setRight(fullRightPaneVBox);
 		makerNode.setTop(menuBar3);
 		makerNode.setCenter(nameDescVBox);
 		makerNode.setBottom(confirmRoomHBox);
 		makerNode2.setTop(menuBar4);
 		makerNode2.setCenter(finalVBox);
+		makerNode2.setRight(outputRooms);
 		makerNode3.setTop(menuBar5);
 		makerNode3.setCenter(allMakerNode3ChoicesVBox);
 		myStage.show();
@@ -676,7 +1242,7 @@ public class GUIScreens extends Application {
 
 	/**
 	 * move the player
-	 * 
+	 *
 	 * @param direction
 	 *            <ul>
 	 *            <li>0 - north</li>
@@ -709,7 +1275,7 @@ public class GUIScreens extends Application {
 
 	/**
 	 * display text in GUI output area
-	 * 
+	 *
 	 * @param text
 	 *            the text to display in the output area
 	 */
