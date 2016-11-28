@@ -30,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -44,7 +45,7 @@ public class GUIScreens extends Application {
 	private int rooms = 0;
 	private ArrayList<Room> roomList = new ArrayList<>();
 	private ArrayList<Edge> edgeList = new ArrayList<>();
-	private TextArea outputText;
+	private static TextArea outputText;
 	// private Room srcRoom, destRoom;
 
 	public static void main(String[] args) {
@@ -196,6 +197,21 @@ public class GUIScreens extends Application {
 				Scene loginScene = new Scene(credVBox);
 				credPopup.setScene(loginScene);
 				credPopup.show();
+			}
+		});
+
+		loadMap.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				File f = new FileChooser().showOpenDialog(myStage);
+				try {
+					DBInterface.loadMap(f);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					System.err.println("=== PROBLEM LOADING MAP ===");
+					e.printStackTrace();
+					System.err.println("=== END MAP PROBLEM ===");
+				}
 			}
 		});
 

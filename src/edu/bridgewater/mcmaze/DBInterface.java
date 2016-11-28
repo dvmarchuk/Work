@@ -75,8 +75,8 @@ public class DBInterface {
 	/**
 	 * Load SQL code from a map file into memory and create the MySQL database
 	 * 
-	 * @param mapFileName
-	 *            the file name of the map file to load
+	 * @param f
+	 *            map file to load
 	 * @throws IOException
 	 *             If there is an issue reading the file
 	 * @throws NumberFormatException
@@ -88,14 +88,16 @@ public class DBInterface {
 	 * @throws SQLException
 	 *             if there is a problem creating the MySQL database
 	 */
-	public static void loadMap(String mapFileName) throws IOException, ClassNotFoundException, SQLException {
+	public static void loadMap(File f) throws IOException, ClassNotFoundException, SQLException {
 		// set up resource readers
-		FileInputStream fileIn = new FileInputStream(new File(mapFileName));
+		FileInputStream fileIn = new FileInputStream(f);
 		ObjectInputStream objectIn = new ObjectInputStream(fileIn);
 
 		// load file header information
 		String relativeBackgroundImagePath = (String) objectIn.readObject();
-		int numSQLStatements = Integer.parseInt((String) objectIn.readObject());
+		// int numSQLStatements = Integer.parseInt((String)
+		// objectIn.readObject());
+		int numSQLStatements = objectIn.readInt();
 		String mapName = (String) objectIn.readObject();
 		Map m = new Map(relativeBackgroundImagePath, mapName);
 
@@ -370,9 +372,7 @@ public class DBInterface {
 				+ " IsEndingRoom BOOLEAN, IsStartingRoom BOOLEAN, PRIMARY KEY (RoomID));");
 		sqlStatements.add("CREATE TABLE " + mapName
 				+ ".Edges (EdgeID INT NOT NULL, FirstNode INT NOT NULL, SecondNode INT NOT NULL, EdgeType INT NOT NULL,"
-				+ " FOREIGN KEY (FirstNode) REFERENCES " + mapName
-				+ ".Rooms(RoomID) ON DELETE CASCADE, FOREIGN KEY (SecondNode) REFERENCES " + mapName
-				+ ".Rooms(RoomID) ON DELETE CASCADE, PRIMARY KEY (EdgeID));");
+				+ " PRIMARY KEY (EdgeID));");
 		// statements to create rooms
 		for (Room r : rooms)
 			sqlStatements.add(r.toSQL(mapName));

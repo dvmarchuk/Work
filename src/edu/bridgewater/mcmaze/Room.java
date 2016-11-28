@@ -177,8 +177,8 @@ public class Room {
 	 */
 	public String toSQL(String mapName) {
 		return String.format(
-				"INSERT INTO %s.Rooms (RoomID, RoomName, RoomDesc, HasMcGregor, IsEndingRoom, IsStartingRoom)\n"
-						+ "VALUES (%d, %s, %s, %d, %d, %d);",
+				"INSERT INTO %s.Rooms (RoomID, RoomName, RoomDesc, HasMcGregor, IsEndingRoom, IsStartingRoom)"
+						+ " VALUES (%d, '%s', '%s', %d, %d, %d);",
 				mapName, getRoomID(), getRoomName(), getRoomDesc(), hasMcGregor() ? 1 : 0, isEndingRoom() ? 1 : 0,
 				isStartingRoom() ? 1 : 0);
 	}

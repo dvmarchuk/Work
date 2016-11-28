@@ -189,7 +189,7 @@ public class Edge {
 	 * @return the SQL instruction required to create this Edge
 	 */
 	public String toSQL(String mapName) {
-		return String.format("INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType)\nVALUES (%d, %d, %d, %d);",
+		return String.format("INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType) VALUES (%d, %d, %d, %d);",
 				mapName, getEdgeID(), getFirstNode(), getSecondNode(), getEdgeType());
 	}
 
