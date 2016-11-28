@@ -107,7 +107,7 @@ public class Player {
 			mcgregor.incrementMoves();
 			GUIScreens.print("You can hear McGregor creeping closer...");
 			if (mcgregor.hasCaughtPlayer(location.getRoomID())) {
-				GUIScreens.print("McGregor has caught you! YOU LOSE!");
+				GUIScreens.print("McGregor has caught you! CHOMP! YOU LOSE!");
 				// prevent player from moving after losing
 				this.location = null;
 			}

@@ -22,7 +22,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
@@ -638,7 +638,7 @@ public class GUIScreens extends Application {
 				vbox.getChildren().addAll(exitLabel, hbox);
 				vbox.setPadding(new Insets(30, 30, 30, 30));
 
-				exit.setOnAction(eventHandler -> System.exit(0));
+				exit.setOnAction(eventHandler -> Platform.exit());
 
 				cancel.setOnAction(eventHandler -> exitPopup.close());
 
@@ -1013,30 +1013,31 @@ public class GUIScreens extends Application {
 		Label selectRoomLabel = new Label("Select a Room:");
 		Label fillerText1 = new Label("is");
 		Label fillerText2 = new Label("of");
-		ToggleButton northWestButton2 = new ToggleButton("North-West");
-		ToggleButton northButton2 = new ToggleButton("North");
-		ToggleButton northEastButton2 = new ToggleButton("North-East");
-		ToggleButton eastButton2 = new ToggleButton("East");
-		ToggleButton southEastButton2 = new ToggleButton("South-East");
-		ToggleButton southButton2 = new ToggleButton("South");
-		ToggleButton southWestButton2 = new ToggleButton("South-West");
-		ToggleButton westButton2 = new ToggleButton("West");
-		ToggleButton upButton2 = new ToggleButton("Above");
-		ToggleButton downButton2 = new ToggleButton("Below");
+		Button northWestButton2 = new Button("North-West");
+		Button northButton2 = new Button("North");
+		Button northEastButton2 = new Button("North-East");
+		Button eastButton2 = new Button("East");
+		Button southEastButton2 = new Button("South-East");
+		Button southButton2 = new Button("South");
+		Button southWestButton2 = new Button("South-West");
+		Button westButton2 = new Button("West");
+		Button upButton2 = new Button("Above");
+		Button downButton2 = new Button("Below");
 		Button confirmRoomPositioningButton = new Button("Confirm this room position");
 		Button nextNodeButton = new Button("Continue to next screen");
 		outputRooms = new TextArea();
-		ToggleGroup toggleGroup = new ToggleGroup();
-		northWestButton2.setToggleGroup(toggleGroup);
-		northButton2.setToggleGroup(toggleGroup);
-		northEastButton2.setToggleGroup(toggleGroup);
-		eastButton2.setToggleGroup(toggleGroup);
-		southEastButton2.setToggleGroup(toggleGroup);
-		southButton2.setToggleGroup(toggleGroup);
-		southWestButton2.setToggleGroup(toggleGroup);
-		westButton2.setToggleGroup(toggleGroup);
-		upButton2.setToggleGroup(toggleGroup);
-		downButton2.setToggleGroup(toggleGroup);
+
+//		ToggleGroup toggleGroup = new ToggleGroup();
+//		northWestButton2.setToggleGroup(toggleGroup);
+//		northButton2.setToggleGroup(toggleGroup);
+//		northEastButton2.setToggleGroup(toggleGroup);
+//		eastButton2.setToggleGroup(toggleGroup);
+//		southEastButton2.setToggleGroup(toggleGroup);
+//		southButton2.setToggleGroup(toggleGroup);
+//		southWestButton2.setToggleGroup(toggleGroup);
+//		westButton2.setToggleGroup(toggleGroup);
+//		upButton2.setToggleGroup(toggleGroup);
+//		downButton2.setToggleGroup(toggleGroup);
 
 		VBox leftSideVBox = new VBox(50);
 		leftSideVBox.getChildren().addAll(northWestButton2, westButton2, southWestButton2);
@@ -1072,6 +1073,7 @@ public class GUIScreens extends Application {
 		downButton2.setStyle("-fx-padding: 8; -fx-font: 18 arial;");
 		confirmRoomPositioningButton.setStyle("-fx-padding: 10; -fx-font: 28 arial;");
 		nextNodeButton.setStyle("-fx-padding: 10; -fx-font: 24 arial;");
+		rightSideVBox.setAlignment(Pos.CENTER_RIGHT);
 		allDirectionalButtonsHBox.setAlignment(Pos.CENTER);
 		allUpHBox.setAlignment(Pos.CENTER);
 		allUpDownHBox.setAlignment(Pos.CENTER);
