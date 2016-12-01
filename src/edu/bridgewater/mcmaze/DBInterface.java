@@ -26,6 +26,7 @@ public class DBInterface {
 	private static Connection con;
 	// private static Object[][] queryResults;
 	private static Map map;
+	static boolean mapLoaded = false;
 	private static String adminUser, adminPass;
 
 	/**
@@ -90,6 +91,12 @@ public class DBInterface {
 	 *             if there is a problem creating the MySQL database
 	 */
 	public static void loadMap(File f) throws IOException, ClassNotFoundException, SQLException {
+		// unload previous map
+		if (mapLoaded) {
+			map.drop(con);
+			mapLoaded = false;
+		}
+
 		// set up resource readers
 		FileInputStream fileIn = new FileInputStream(f);
 		ObjectInputStream objectIn = new ObjectInputStream(fileIn);
@@ -111,6 +118,7 @@ public class DBInterface {
 
 		map = m;
 		map.create(con);
+		mapLoaded = true;
 	}
 
 	/**
@@ -152,7 +160,7 @@ public class DBInterface {
 	public static Room[] getAdjacentRooms(final int roomID) throws SQLException {
 		// get all edges which contain the given room
 		PreparedStatement ps = con.prepareStatement("SELECT EdgeID, FirstNode, SecondNode, EdgeType FROM "
-				+ map.getName() + ".Edges WHERE FirstNode='" + roomID + "' OR SecondNode='" + roomID + "';");
+				+ map.getName() + ".Edges WHERE FirstNode='" + roomID + "';");
 		ArrayList<Room> rooms = new ArrayList<>();
 		ResultSet rs = ps.executeQuery();
 		// get all rooms that are not the given room in the edges found
@@ -219,9 +227,8 @@ public class DBInterface {
 		boolean found = false;
 		int edgeID = -1;
 		while (!found && rs.next()) {
-			int firstNode = rs.getInt("FirstNode");
-			int secondNode = rs.getInt("SecondNode");
-			if (firstNode == roomID || secondNode == roomID) {
+			int firstNode = rs.getInt("SecondNode"); // TODO verify this
+			if (firstNode == roomID) {
 				found = true;
 				edgeID = rs.getInt("EdgeID");
 			}
@@ -270,16 +277,16 @@ public class DBInterface {
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
-	public static int[] getExits(final int roomID) throws SQLException {
+	public static ArrayList<Integer> getExits(final int roomID) throws SQLException {
 		ArrayList<Integer> exits = new ArrayList<>();
 		Edge[] edges = getEdges(roomID);
 		for (Edge e : edges)
 			exits.add(e.getEdgeType());
 		// convert to array
-		int[] result = new int[exits.size()];
-		for (int i = 0; i < result.length; i++)
-			result[i] = exits.get(i);
-		return result;
+		// int[] result = new int[exits.size()];
+		// for (int i = 0; i < result.length; i++)
+		// result[i] = exits.get(i);
+		return exits;
 	}
 
 	/**
@@ -300,7 +307,7 @@ public class DBInterface {
 	}
 
 	/**
-	 * @return the easter egg room
+	 * @return the easter egg room or {@code null} if there is no such room
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
@@ -311,9 +318,10 @@ public class DBInterface {
 						+ map.getName() + ".Rooms WHERE HasMcGregor='1';");
 		ResultSet rs = ps.executeQuery();
 		// get the easter egg room
-		rs.next();
-		return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
-				rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+		if (rs.next())
+			return new Room(rs.getString("RoomName"), rs.getString("RoomDesc"), rs.getBoolean("IsStartingRoom"),
+					rs.getBoolean("IsEndingRoom"), rs.getBoolean("HasMcGregor"), rs.getInt("RoomID"));
+		return null;
 	}
 
 	/**
@@ -321,7 +329,7 @@ public class DBInterface {
 	 * @throws SQLException
 	 *             if there is a SQL problem
 	 */
-	public static Room getEndingRooms() throws SQLException {
+	public static Room getEndingRoom() throws SQLException {
 		// query the database
 		PreparedStatement ps = con
 				.prepareStatement("SELECT RoomID, RoomName, RoomDesc, HasMcGregor, IsStartingRoom, IsEndingRoom FROM "
@@ -378,8 +386,10 @@ public class DBInterface {
 		for (Room r : rooms)
 			sqlStatements.add(r.toSQL(mapName));
 		// statement to create edges
-		for (Edge e : edges)
+		for (Edge e : edges) {
 			sqlStatements.add(e.toSQL(mapName));
+			sqlStatements.add(e.getMirrorsEdge(mapName));
+		}
 
 		// file header information
 		out.writeObject("unused"); // relative bg image path
@@ -395,5 +405,6 @@ public class DBInterface {
 
 		// close resources
 		out.close();
+		System.out.println("Wrote file '" + f.toString() + "'");
 	}
 }

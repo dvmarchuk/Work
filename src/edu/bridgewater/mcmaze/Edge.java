@@ -14,37 +14,6 @@ public class Edge {
 	private int edgeType;
 
 	/**
-	 * constructor
-	 * 
-	 * @param firstNode
-	 *            the room id of a room in this edge
-	 * @param secondNode
-	 *            the room id of the other room in this edge. these ids CAN be
-	 *            the same, though this might be confusing
-	 * @param edgeType
-	 *            the relationship between the two rooms
-	 *            <ul>
-	 *            <li>0 - north</li>
-	 *            <li>1 - north-east</li>
-	 *            <li>2 - east</li>
-	 *            <li>3 - south-east</li>
-	 *            <li>4 - south</li>
-	 *            <li>5 - south-west</li>
-	 *            <li>6 - west</li>
-	 *            <li>7 - north-west</li>
-	 *            <li>8 - up</li>
-	 *            <li>9 - down</li>
-	 *            </ul>
-	 */
-	@Deprecated
-	public Edge(int firstNode, int secondNode, int edgeType) {
-		setFirstNode(firstNode);
-		setSecondNode(secondNode);
-		setEdgeType(edgeType);
-		setEdgeID(-1); // TODO change this
-	}
-
-	/**
 	 * constructor (if loading from DB)
 	 * 
 	 * @param firstNode
@@ -146,6 +115,10 @@ public class Edge {
 	 * @return a unique, unused edgeID
 	 */
 	public int generateEdgeID() {
+		// ensure list is not null
+		if (usedIDs == null)
+			usedIDs = new ArrayList<>();
+		// generate unique, unused edgeID
 		int id = 0;
 		do {
 			id++;
@@ -191,6 +164,59 @@ public class Edge {
 	public String toSQL(String mapName) {
 		return String.format("INSERT INTO %s.Edges (EdgeID, FirstNode, SecondNode, EdgeType) VALUES (%d, %d, %d, %d);",
 				mapName, getEdgeID(), getFirstNode(), getSecondNode(), getEdgeType());
+	}
+
+	/**
+	 * get the correspondingly opposite edge to this one. also, PARKOUR!
+	 * 
+	 * @param mapName
+	 *            the name of the database the edge table is in
+	 * @return the SQL instruction required to create the Edge opposite this one
+	 */
+	public String getMirrorsEdge(String mapName) {
+		int firstNode = this.secondNode;
+		int secondNode = this.firstNode;
+		int edgeID = generateEdgeID();
+		int edgeType = getOppositeEdge(this.edgeType);
+		return new Edge(firstNode, secondNode, edgeType, edgeID).toSQL(mapName);
+	}
+
+	private int getOppositeEdge(int edgeType) {
+		int i;
+		switch (edgeType) {
+		default:
+		case 0:
+			i = 4;
+			break;
+		case 1:
+			i = 5;
+			break;
+		case 2:
+			i = 6;
+			break;
+		case 3:
+			i = 7;
+			break;
+		case 4:
+			i = 0;
+			break;
+		case 5:
+			i = 1;
+			break;
+		case 6:
+			i = 2;
+			break;
+		case 7:
+			i = 3;
+			break;
+		case 8:
+			i = 9;
+			break;
+		case 9:
+			i = 8;
+			break;
+		}
+		return i;
 	}
 
 	/*

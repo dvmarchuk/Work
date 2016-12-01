@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.mysql.jdbc.Driver;
-
 /**
  * This class holds information from a map loaded from a file
  * 
@@ -85,11 +83,12 @@ public class Map {
 	public void create(Connection con) throws SQLException {
 		// execute each line of SQL code from the file to create the database
 		for (String s : sqlStatements) {
+			System.out.println(s);
 			PreparedStatement ps = con.prepareStatement(s);
 			ps.executeUpdate();
 		}
 
-		System.out.printf("Created map %s with %d lines of SQL\n", mapName, sqlStatements.size());
+		System.out.printf("Created map '%s' with %d lines of SQL\n", mapName, sqlStatements.size());
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class Map {
 	public void drop(Connection con) throws SQLException {
 		PreparedStatement ps = con.prepareStatement("DROP DATABASE " + mapName + ";");
 		ps.executeUpdate();
-		System.out.println("Map " + getName() + " dropped.");
+		System.out.println("Map '" + getName() + "' dropped.");
 	}
 
 	/**

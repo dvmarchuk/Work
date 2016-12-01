@@ -7,50 +7,45 @@ import java.util.Random;
  * search the maze until he is within a certain distance of the player at which
  * point he will chase the player.
  * 
- * @author Alan Bowman
+ * @author Alan Bowman, Charles German
  */
 
 public class Enemy {
-	String name;
-	Room location;
-	int previousDir;
-	Random rand;
-	final int CHASE_DISTANCE = 2;
+	private int movesUntilCapture;
+	private boolean playerSeen;
+	private int movesMade;
 
-	public Enemy(Room location) {
-		this.name = "clown";
-		this.location = location;
-		rand = new Random();
+	public Enemy() {
+		Random r = new Random();
+		int upperBound = 7;
+		int lowerBound = 3;
+		movesUntilCapture = r.nextInt(upperBound - lowerBound + 1) + lowerBound;
+		playerSeen = false;
 	}
 
-	public Enemy(String name, Room location) {
-		this.name = name;
-		this.location = location;
-		rand = new Random();
+	/**
+	 * @param playerRoomID
+	 *            the roomID for the room the player is in
+	 * @return {@code true} if the player has run out of time after seeing the
+	 *         enemy
+	 */
+	public boolean hasCaughtPlayer(int playerRoomID) {
+		return movesMade == movesUntilCapture && playerSeen;
 	}
 
-	public void performEnemyTurn() {
-		move(enemyLogic());
-		// if enemy location is adjacent to player location alert the player to
-		// hearing footsteps
-		// if enemy location == player location kill the player
+	public int getMovesMade() {
+		return movesMade;
 	}
 
-	// Determines the direction in which the enemy moves (Enemy AI)
-	public int enemyLogic() {
-		int direction;
-		while (true) {
-			direction = rand.nextInt(9);
-			if (direction == previousDir) {
-				continue;
-			}
-			break;
-		}
-		previousDir = direction;
-		return direction;
+	public void incrementMoves() {
+		movesMade++;
 	}
 
-	public void move(int direction) {
+	public boolean playerSpotted() {
+		return playerSeen;
+	}
 
+	public void setPlayerSpotted(boolean b) {
+		playerSeen = b;
 	}
 }
