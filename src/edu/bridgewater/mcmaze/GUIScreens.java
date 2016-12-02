@@ -608,13 +608,29 @@ public class GUIScreens extends Application {
 
 		// Actions on Root Node
 		titleLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
 			// TODO here's the easter egg stuff
 			@Override
 			public void handle(MouseEvent event) {
+				System.out.println("Mouse Entered");
 				if (!easterEggDisplayed)
 					startCounter = System.currentTimeMillis();
 			}
 		});
+
+		titleLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent me) {
+				System.out.println("Mouse Exited");
+				if (!easterEggDisplayed) {
+					differenceCounter = System.currentTimeMillis() - startCounter;
+					if (differenceCounter >= 3000) {
+						triggerEasterEgg(myStage);
+						easterEggDisplayed = true;
+					}
+				}
+			}
+		});
+
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
@@ -1500,5 +1516,37 @@ public class GUIScreens extends Application {
 			if (r.getRoomID() == roomID)
 				return r;
 		return null;
+	}
+
+	/**
+	 * trigger the super painful easter egg
+	 * 
+	 * @param myStage
+	 */
+	private void triggerEasterEgg(Stage myStage) {
+		for (int i = 0; i < 99; i++) {
+			Text titleLabel = new Text("McEaster McEggor");
+			titleLabel.setStyle("-fx-font-size: 90 arial;");
+			DropShadow dropShadow = new DropShadow();
+			titleLabel.setEffect(dropShadow);
+			titleLabel.setCache(true);
+			titleLabel.setFill(Color.AQUA);
+			titleLabel.setFont(Font.font(null, FontWeight.BOLD, 40));
+
+			Stage eggPopup = new Stage();
+			eggPopup.initModality(Modality.APPLICATION_MODAL);
+			eggPopup.initOwner(myStage);
+			eggPopup.setTitle("You Like Eggs? I Like Eggs. But Why Easter Eggs? Makes 0 Sense. "
+					+ "Sorry, I Digress. But Then Again, Why Bunnies? THEY DON'T EVEN LAY EGGS! IT'S JUST SO I");
+			eggPopup.setResizable(false);
+
+			VBox vbox = new VBox();
+			vbox.getChildren().addAll(titleLabel);
+			vbox.setPadding(new Insets(30, 30, 30, 30));
+
+			final Scene eggScene = new Scene(vbox, 870, 200);
+			eggPopup.setScene(eggScene);
+			eggPopup.show();
+		}
 	}
 }
