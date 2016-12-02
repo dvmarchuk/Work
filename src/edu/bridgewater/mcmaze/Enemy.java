@@ -41,7 +41,7 @@ public class Enemy {
 		movesMade++;
 	}
 
-	public boolean playerSpotted() {
+	public boolean spottedPlayer() {
 		return playerSeen;
 	}
 

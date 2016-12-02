@@ -88,12 +88,12 @@ public class Player {
 			// prevent player from moving after winning
 			this.location = null;
 		}
-		if (location.hasMcGregor()) {
+		if (location.hasMcGregor()&&!mcgregor.spottedPlayer()) {
 			mcgregor.setPlayerSpotted(true);
 			GUIScreens.print("McGregor has spotted you. It won't be long before he catches you...");
 			// TODO start enemy chase
 		}
-		if (mcgregor != null) {
+		if (mcgregor != null && mcgregor.spottedPlayer()) {
 			mcgregor.incrementMoves();
 			GUIScreens.print("You can hear McGregor creeping closer...");
 			if (mcgregor.hasCaughtPlayer(location.getRoomID())) {
