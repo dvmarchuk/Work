@@ -1062,10 +1062,10 @@ public class GUIScreens extends Application {
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
 				// prevent accidental SQL injection
-				rmDescription.replace("'", "");
-				rmDescription.replace("\"", "");
-				rmName.replace("'", "");
-				rmName.replace("\"", "");
+				rmDescription = rmDescription.replace("'", "");
+				rmDescription = rmDescription.replace("\"", "");
+				rmName = rmName.replace("'", "");
+				rmName = rmName.replace("\"", "");
 
 				roomDesc.setText("");
 				roomName.setText("");
@@ -1088,10 +1088,10 @@ public class GUIScreens extends Application {
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
 				// prevent accidental SQL injection
-				rmDescription.replace("'", "");
-				rmDescription.replace("\"", "");
-				rmName.replace("'", "");
-				rmName.replace("\"", "");
+				rmDescription = rmDescription.replace("'", "");
+				rmDescription = rmDescription.replace("\"", "");
+				rmName = rmName.replace("'", "");
+				rmName = rmName.replace("\"", "");
 
 				roomDesc.setText("");
 				roomName.setText("");
