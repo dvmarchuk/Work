@@ -1061,6 +1061,12 @@ public class GUIScreens extends Application {
 				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
+				// prevent accidental SQL injection
+				rmDescription.replace("'", "");
+				rmDescription.replace("\"", "");
+				rmName.replace("'", "");
+				rmName.replace("\"", "");
+
 				roomDesc.setText("");
 				roomName.setText("");
 				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
@@ -1081,6 +1087,12 @@ public class GUIScreens extends Application {
 				rooms++;
 				String rmName = roomName.getText();
 				String rmDescription = roomDesc.getText();
+				// prevent accidental SQL injection
+				rmDescription.replace("'", "");
+				rmDescription.replace("\"", "");
+				rmName.replace("'", "");
+				rmName.replace("\"", "");
+
 				roomDesc.setText("");
 				roomName.setText("");
 				roomList.add(new Room(rmName, rmDescription, false, false, false, rooms));
@@ -1544,7 +1556,7 @@ public class GUIScreens extends Application {
 			vbox.getChildren().addAll(titleLabel);
 			vbox.setPadding(new Insets(30, 30, 30, 30));
 
-			final Scene eggScene = new Scene(vbox, 870, 200);
+			final Scene eggScene = new Scene(vbox, 1000, 200);
 			eggPopup.setScene(eggScene);
 			eggPopup.show();
 		}
