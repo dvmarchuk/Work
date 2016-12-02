@@ -25,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -49,13 +50,18 @@ import javafx.stage.Stage;
  *
  */
 public class GUIScreens extends Application {
+	private static Player p; // TODO should this be private?
+	// map maker stuff
 	private int rooms = 0;
 	private ArrayList<Room> roomList = new ArrayList<>();
 	private ArrayList<Edge> edgeList = new ArrayList<>();
 	private static TextArea outputText, outputRooms;
 	private static String outputRoomInfo;
 	private static boolean edgeConfirmed = true;
-	static Player p;
+	// easter egg stuff
+	private static long differenceCounter;
+	private static long startCounter;
+	private boolean easterEggDisplayed;
 
 	/**
 	 * This is where the action's at!
@@ -577,6 +583,7 @@ public class GUIScreens extends Application {
 		Button makerButton = new Button("Map Maker");
 		Button quitButton = new Button("Quit");
 		DropShadow dropShadow = new DropShadow();
+		easterEggDisplayed = false;
 
 		// CSS for rootNode
 		titleLabel.setStyle("-fx-font-size: 90 arial;");
@@ -586,7 +593,9 @@ public class GUIScreens extends Application {
 
 		VBox introVBox = new VBox(60);
 		introVBox.setPadding(new Insets(130, 1100, 50, 60));
-		introVBox.getChildren().addAll(titleLabel, playButton, makerButton, quitButton);
+		// introVBox.getChildren().addAll(titleLabel, playButton, makerButton,
+		// quitButton);
+		introVBox.getChildren().addAll(playButton, makerButton, quitButton);
 
 		dropShadow.setOffsetY(3.5);
 		dropShadow.setColor(Color.color(.4, .4, .4));
@@ -598,6 +607,14 @@ public class GUIScreens extends Application {
 		titleLabel.setTranslateY(70);
 
 		// Actions on Root Node
+		titleLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+			// TODO here's the easter egg stuff
+			@Override
+			public void handle(MouseEvent event) {
+				if (!easterEggDisplayed)
+					startCounter = System.currentTimeMillis();
+			}
+		});
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
