@@ -22,9 +22,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -44,7 +44,8 @@ import javafx.stage.Stage;
  * The main class for the game application. this class handles the GUI and all
  * associated events
  *
- * @author Jason Laatz, Dennis Marchuk, Charles German, Alan Bowman
+ * @author Jason Laatz, Dennis Marchuk, Charles German, Alan Bowman, Zach
+ *         Squires
  *
  */
 public class GUIScreens extends Application {
@@ -54,9 +55,14 @@ public class GUIScreens extends Application {
 	private static TextArea outputText, outputRooms;
 	private static String outputRoomInfo;
 	private static boolean edgeConfirmed = true;
-	static Player p; // TODO implement player stuff
-	// private Room srcRoom, destRoom;
+	static Player p;
 
+	/**
+	 * This is where the action's at!
+	 * 
+	 * @param args
+	 *            we don't use these...
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -325,6 +331,7 @@ public class GUIScreens extends Application {
 		});
 
 		login3.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent ae) {
 				Stage credPopup = new Stage();
 				credPopup.initModality(Modality.APPLICATION_MODAL);
@@ -713,7 +720,7 @@ public class GUIScreens extends Application {
 		outputText.setPrefRowCount(30);
 		outputText.setEditable(false);
 		outputText.setWrapText(true);
-		outputText.setText(""); // TODO is this necessary?
+		outputText.setText("");
 		northWestButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
 		northButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
 		northEastButton.setStyle("-fx-padding: 5; -fx-font: 14 arial; -fx-base: #a7f1e9;");
@@ -744,42 +751,56 @@ public class GUIScreens extends Application {
 		helpLabel.setAlignment(Pos.CENTER);
 		helpButtonVBox.setAlignment(Pos.CENTER);
 		upDownLabeledVBox.setAlignment(Pos.CENTER);
-		
-		
-		//Actions for TextField 
-		userInput.setOnAction(new EventHandler<ActionEvent>() {
-			public void textMove(ActionEvent ae) {
+
+		// Actions for TextField
+		userInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			/**
+			 * logic for moving the player when prompted via text
+			 * 
+			 * @param command
+			 *            the valid move command to parse
+			 */
+			private void textMove(String command) {
 				String delims = " ";
-				String[] parts = userInput.getText().split(delims);
-				if(parts[1].equalsIgnoreCase("north"))
+				String[] parts = command.split(delims);
+				if (parts[1].equalsIgnoreCase("north"))
 					movePlayer(0);
-				if(parts[1].equalsIgnoreCase("north-east"))
+				else if (parts[1].equalsIgnoreCase("north-east"))
 					movePlayer(1);
-				if(parts[1].equalsIgnoreCase("east"))
+				else if (parts[1].equalsIgnoreCase("east"))
 					movePlayer(2);
-				if(parts[1].equalsIgnoreCase("south-east"))
+				else if (parts[1].equalsIgnoreCase("south-east"))
 					movePlayer(3);
-				if(parts[1].equalsIgnoreCase("south"))
+				else if (parts[1].equalsIgnoreCase("south"))
 					movePlayer(4);
-				if(parts[1].equalsIgnoreCase("south-west"))
+				else if (parts[1].equalsIgnoreCase("south-west"))
 					movePlayer(5);
-				if(parts[1].equalsIgnoreCase("west"))
+				else if (parts[1].equalsIgnoreCase("west"))
 					movePlayer(6);
-				if(parts[1].equalsIgnoreCase("north-west"))
+				else if (parts[1].equalsIgnoreCase("north-west"))
 					movePlayer(7);
-				if(parts[1].equalsIgnoreCase("up"))
+				else if (parts[1].equalsIgnoreCase("up"))
 					movePlayer(8);
-				if(parts[1].equalsIgnoreCase("down"))
+				else if (parts[1].equalsIgnoreCase("down"))
 					movePlayer(9);
-				
+				else
+					GUIScreens.print("Direction unrecognized");
 			}
 
 			@Override
-			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void handle(KeyEvent arg0) {
+				if (arg0.getCode() == KeyCode.ENTER) {
+					// TODO here's the text movement
+					String input = userInput.getText();
+					if (input.startsWith("move "))
+						textMove(input);
+					else
+						GUIScreens.print("Command not recognized");
+				}
+				// else, the command is not ready to be parsed
 			}
-			});
+		});
 
 		// Actions for Buttons on PlayNode
 		helpButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -1063,17 +1084,17 @@ public class GUIScreens extends Application {
 		Button nextNodeButton = new Button("Continue to next screen");
 		outputRooms = new TextArea();
 
-//		ToggleGroup toggleGroup = new ToggleGroup();
-//		northWestButton2.setToggleGroup(toggleGroup);
-//		northButton2.setToggleGroup(toggleGroup);
-//		northEastButton2.setToggleGroup(toggleGroup);
-//		eastButton2.setToggleGroup(toggleGroup);
-//		southEastButton2.setToggleGroup(toggleGroup);
-//		southButton2.setToggleGroup(toggleGroup);
-//		southWestButton2.setToggleGroup(toggleGroup);
-//		westButton2.setToggleGroup(toggleGroup);
-//		upButton2.setToggleGroup(toggleGroup);
-//		downButton2.setToggleGroup(toggleGroup);
+		// ToggleGroup toggleGroup = new ToggleGroup();
+		// northWestButton2.setToggleGroup(toggleGroup);
+		// northButton2.setToggleGroup(toggleGroup);
+		// northEastButton2.setToggleGroup(toggleGroup);
+		// eastButton2.setToggleGroup(toggleGroup);
+		// southEastButton2.setToggleGroup(toggleGroup);
+		// southButton2.setToggleGroup(toggleGroup);
+		// southWestButton2.setToggleGroup(toggleGroup);
+		// westButton2.setToggleGroup(toggleGroup);
+		// upButton2.setToggleGroup(toggleGroup);
+		// downButton2.setToggleGroup(toggleGroup);
 
 		VBox leftSideVBox = new VBox(50);
 		leftSideVBox.getChildren().addAll(northWestButton2, westButton2, southWestButton2);
@@ -1142,7 +1163,6 @@ public class GUIScreens extends Application {
 				confirmOutputRoomInfo();
 			}
 		});
-		// TODO setHasMcGregor(true) somewhere
 
 		nextNodeButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
@@ -1327,7 +1347,7 @@ public class GUIScreens extends Application {
 	 */
 	private void movePlayer(int direction) {
 		try {
-			p.move(direction); // initialize player if necessary
+			// initialize player if necessary
 			if (p == null) {
 				try {
 					p = new Player(DBInterface.getStartingRoom());
@@ -1338,6 +1358,7 @@ public class GUIScreens extends Application {
 				}
 			}
 			// move the player
+			p.move(direction);
 		} catch (SQLException e) {
 			System.err.println("=== PROBLEM MOVING PLAYER ===");
 			e.printStackTrace();
@@ -1347,16 +1368,9 @@ public class GUIScreens extends Application {
 
 	/**
 	 * @param e
-	 *            the edge to add/modify
+	 *            the edge to add/modify to/in the list
 	 */
 	private void updateEdgeList(Edge e) {
-//		// this is just a hack since there were weird design conflicts
-//		int realFirstNode = e.getSecondNode();
-//		int realSecondNode = e.getFirstNode();
-//		e.setFirstNode(realFirstNode);
-//		e.setSecondNode(realSecondNode);
-		
-		// actually update the edge list
 		if (edgeConfirmed) {
 			edgeList.add(e);
 			genOutputRoomInfo(e);
@@ -1453,7 +1467,6 @@ public class GUIScreens extends Application {
 	public static void print(String text) {
 		outputText.appendText(text + '\n');
 	}
-	// TODO make sure that all methods have javadoc comments
 
 	/**
 	 * get room (this is ONLY for the map-maker, which is not connected to the
