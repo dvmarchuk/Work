@@ -219,6 +219,19 @@ public class Edge {
 		return i;
 	}
 
+	/**
+	 * mark the given id as free
+	 * 
+	 * @param id
+	 *            the id to free up
+	 */
+	public static void freeID(int id) {
+		if (usedIDs.contains(id)) {
+			int index = usedIDs.indexOf(id);
+			usedIDs.remove(index);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

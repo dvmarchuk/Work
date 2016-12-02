@@ -1375,6 +1375,8 @@ public class GUIScreens extends Application {
 			edgeList.add(e);
 			genOutputRoomInfo(e);
 		} else {
+			// TODO free used edgeID
+			// Edge.freeID(edgeList.get(edgeList.size()-1).getEdgeID());
 			edgeList.remove(edgeList.size() - 1); // remove old edge
 			edgeList.add(e); // add edge (modified)
 			genOutputRoomInfo(e);
