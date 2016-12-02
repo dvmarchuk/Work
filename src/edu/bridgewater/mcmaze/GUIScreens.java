@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.management.timer.Timer;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -25,6 +27,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -33,6 +38,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -54,6 +60,9 @@ public class GUIScreens extends Application {
 	private static TextArea outputText, outputRooms;
 	private static String outputRoomInfo;
 	private static boolean edgeConfirmed = true;
+	private static long startCounter;
+	private static long differenceCounter;
+	private boolean isEasterEggDisplayed;
 	static Player p; // TODO implement player stuff
 	// private Room srcRoom, destRoom;
 
@@ -570,6 +579,16 @@ public class GUIScreens extends Application {
 		Button makerButton = new Button("Map Maker");
 		Button quitButton = new Button("Quit");
 		DropShadow dropShadow = new DropShadow();
+		isEasterEggDisplayed = false;
+		Image image1 = new Image("/assets/McG1.png");
+		//Image image2 = new Image("/assets/McG2.png");
+		//Image image3 = new Image("/assets/McG3.png");
+		//Image image4 = new Image("/assets/McG4.png");
+		//Image image5 = new Image("/assets/McG5.png");
+		//Image image6 = new Image("/assets/McG6.png");
+		//Image image7 = new Image("/assets/McG7.png");
+		//Image image8 = new Image("assets/McG8.png");
+		ImageView imageView = new ImageView(image1);
 
 		// CSS for rootNode
 		titleLabel.setStyle("-fx-font-size: 90 arial;");
@@ -591,6 +610,27 @@ public class GUIScreens extends Application {
 		titleLabel.setTranslateY(70);
 
 		// Actions on Root Node
+		titleLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent me) {
+		    	if(!isEasterEggDisplayed){
+		    		System.out.println("Mouse entered");
+		    		startCounter = System.currentTimeMillis();
+		    	}
+		    }
+		});
+		titleLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent me) {
+		    	if(!isEasterEggDisplayed){
+		    		System.out.println("Mouse exited");
+		    		differenceCounter = System.currentTimeMillis() - startCounter;
+		    		if(differenceCounter >= 3000){
+		    			//rootNode.getChildren().addAll(imageView);
+		    			isEasterEggDisplayed = true;
+		    		}
+		    	}
+		    }
+		});
+
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ae) {
 				myStage.setScene(playScene);
@@ -1319,7 +1359,7 @@ public class GUIScreens extends Application {
 //		int realSecondNode = e.getFirstNode();
 //		e.setFirstNode(realFirstNode);
 //		e.setSecondNode(realSecondNode);
-		
+
 		// actually update the edge list
 		if (edgeConfirmed) {
 			edgeList.add(e);
@@ -1333,7 +1373,7 @@ public class GUIScreens extends Application {
 
 	/**
 	 * generate and temporarily store output room info
-	 * 
+	 *
 	 * @param e
 	 *            the edge to store info for
 	 */
@@ -1422,7 +1462,7 @@ public class GUIScreens extends Application {
 	/**
 	 * get room (this is ONLY for the map-maker, which is not connected to the
 	 * database)
-	 * 
+	 *
 	 * @param roomID
 	 *            the room id to find
 	 * @return the {@code Room} object, or {@code null}
