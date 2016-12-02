@@ -49,3 +49,4 @@ public class Enemy {
 		playerSeen = b;
 	}
 }
+
