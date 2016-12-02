@@ -744,6 +744,42 @@ public class GUIScreens extends Application {
 		helpLabel.setAlignment(Pos.CENTER);
 		helpButtonVBox.setAlignment(Pos.CENTER);
 		upDownLabeledVBox.setAlignment(Pos.CENTER);
+		
+		
+		//Actions for TextField 
+		userInput.setOnAction(new EventHandler<ActionEvent>() {
+			public void textMove(ActionEvent ae) {
+				String delims = " ";
+				String[] parts = userInput.getText().split(delims);
+				if(parts[1].equalsIgnoreCase("north"))
+					movePlayer(0);
+				if(parts[1].equalsIgnoreCase("north-east"))
+					movePlayer(1);
+				if(parts[1].equalsIgnoreCase("east"))
+					movePlayer(2);
+				if(parts[1].equalsIgnoreCase("south-east"))
+					movePlayer(3);
+				if(parts[1].equalsIgnoreCase("south"))
+					movePlayer(4);
+				if(parts[1].equalsIgnoreCase("south-west"))
+					movePlayer(5);
+				if(parts[1].equalsIgnoreCase("west"))
+					movePlayer(6);
+				if(parts[1].equalsIgnoreCase("north-west"))
+					movePlayer(7);
+				if(parts[1].equalsIgnoreCase("up"))
+					movePlayer(8);
+				if(parts[1].equalsIgnoreCase("down"))
+					movePlayer(9);
+				
+			}
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			});
 
 		// Actions for Buttons on PlayNode
 		helpButton.setOnAction(new EventHandler<ActionEvent>() {
