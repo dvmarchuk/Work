@@ -580,7 +580,11 @@ public class GUIScreens extends Application {
 		Button quitButton = new Button("Quit");
 		DropShadow dropShadow = new DropShadow();
 		isEasterEggDisplayed = false;
-		Image image1 = new Image("/assets/McG1.png");
+		try{
+		Image image1 = new Image("/mc-maze/assets/McG1.png");
+		}catch(Exception e){
+			System.out.println("NOPE");
+		}
 		//Image image2 = new Image("/assets/McG2.png");
 		//Image image3 = new Image("/assets/McG3.png");
 		//Image image4 = new Image("/assets/McG4.png");
@@ -588,7 +592,7 @@ public class GUIScreens extends Application {
 		//Image image6 = new Image("/assets/McG6.png");
 		//Image image7 = new Image("/assets/McG7.png");
 		//Image image8 = new Image("assets/McG8.png");
-		ImageView imageView = new ImageView(image1);
+		//ImageView imageView = new ImageView(image1);
 
 		// CSS for rootNode
 		titleLabel.setStyle("-fx-font-size: 90 arial;");
