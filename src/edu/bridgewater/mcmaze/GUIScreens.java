@@ -581,7 +581,7 @@ public class GUIScreens extends Application {
 		DropShadow dropShadow = new DropShadow();
 		isEasterEggDisplayed = false;
 		try{
-		Image image1 = new Image("/mc-maze/assets/McG1.png");
+		Image image1 = new Image("assets/McG1.png");
 		}catch(Exception e){
 			System.out.println("NOPE");
 		}
