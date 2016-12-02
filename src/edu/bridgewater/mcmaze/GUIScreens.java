@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.management.timer.Timer;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -24,11 +22,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -38,7 +32,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -579,20 +572,7 @@ public class GUIScreens extends Application {
 		Button makerButton = new Button("Map Maker");
 		Button quitButton = new Button("Quit");
 		DropShadow dropShadow = new DropShadow();
-		isEasterEggDisplayed = false;
-		try{
-		Image image1 = new Image("assets/McG1.png");
-		}catch(Exception e){
-			System.out.println("NOPE");
-		}
-		//Image image2 = new Image("/assets/McG2.png");
-		//Image image3 = new Image("/assets/McG3.png");
-		//Image image4 = new Image("/assets/McG4.png");
-		//Image image5 = new Image("/assets/McG5.png");
-		//Image image6 = new Image("/assets/McG6.png");
-		//Image image7 = new Image("/assets/McG7.png");
-		//Image image8 = new Image("assets/McG8.png");
-		//ImageView imageView = new ImageView(image1);
+		isEasterEggDisplayed = false;			
 
 		// CSS for rootNode
 		titleLabel.setStyle("-fx-font-size: 90 arial;");
@@ -602,7 +582,7 @@ public class GUIScreens extends Application {
 
 		VBox introVBox = new VBox(60);
 		introVBox.setPadding(new Insets(130, 1100, 50, 60));
-		introVBox.getChildren().addAll(titleLabel, playButton, makerButton, quitButton);
+		introVBox.getChildren().addAll(playButton, makerButton, quitButton);
 
 		dropShadow.setOffsetY(3.5);
 		dropShadow.setColor(Color.color(.4, .4, .4));
@@ -628,7 +608,7 @@ public class GUIScreens extends Application {
 		    		System.out.println("Mouse exited");
 		    		differenceCounter = System.currentTimeMillis() - startCounter;
 		    		if(differenceCounter >= 3000){
-		    			//rootNode.getChildren().addAll(imageView);
+		    			TriggerEasterEgg(myStage);
 		    			isEasterEggDisplayed = true;
 		    		}
 		    	}
@@ -1476,5 +1456,32 @@ public class GUIScreens extends Application {
 			if (r.getRoomID() == roomID)
 				return r;
 		return null;
+	}
+	
+	private void TriggerEasterEgg(Stage myStage){
+		for(int i = 0; i < 99; i++){
+			Text titleLabel = new Text("McEaster McEggor");
+			titleLabel.setStyle("-fx-font-size: 90 arial;");
+			DropShadow dropShadow = new DropShadow();
+			titleLabel.setEffect(dropShadow);
+			titleLabel.setCache(true);
+			titleLabel.setFill(Color.AQUA);
+			titleLabel.setFont(Font.font(null, FontWeight.BOLD, 40));
+		
+			Stage eggPopup = new Stage();
+			eggPopup.initModality(Modality.APPLICATION_MODAL);
+			eggPopup.initOwner(myStage);
+			eggPopup.setTitle("You Like Eggs? I Like Eggs. But Why Easter Eggs? Makes 0 Sense. "
+					+ "Sorry, I Digress. But Then Again, Why Bunnies? THEY DON'T EVEN LAY EGGS! IT'S JUST SO I");
+			eggPopup.setResizable(false);
+
+			VBox vbox = new VBox();
+			vbox.getChildren().addAll(titleLabel);
+			vbox.setPadding(new Insets(30, 30, 30, 30));
+
+			final Scene eggScene = new Scene(vbox, 870, 200);
+			eggPopup.setScene(eggScene);
+			eggPopup.show();
+		}
 	}
 }
